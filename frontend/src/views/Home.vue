@@ -1,13 +1,13 @@
 <template>
-  <HelloWorld />
+  <Mathpix />
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld';
+import Mathpix from '../components/Mathpix';
 
 export default {
   components: {
-    HelloWorld,
+    Mathpix,
   },
 };
 </script>
