@@ -1,9 +1,11 @@
-# API Examples
+# Mathpix Latex Expansion
 
 ## Docs 
 
-Some API examples for the image to Latex API that powers mathpix.com as well as others.  The general docs for the API can be found here: http://docs.mathpix.com
+Created for Hophacks Fall 2019.
 
-The purpose of this repo is to provide illustrative examples for various platforms.  Please use https://github.com/mathpix/ios-sample for a sample iOS app and use https://github.com/mathpix/android-sample for an Android one.
+The purpose of this repo is to fulfill the Mathpix challenge to expand mathpix snip technology. Mathpix snip is a technology which processes handwritten or digitally printed advanced mathematical expressions and extracts Latex code from them. This process expands on mathpix snip technology to process larger data sets, like whole pages or several pages, rather than just a few lines which must be manually cropped (the current working stage of mathpix snip).
 
-Note: for production use, please request an API key from support@mathpix.com.
+This project was created using publicly available APIs and Mathpix API found here: http://docs.mathpix.com
+
+This application was built using Flask and Vue.js frameworks to showcase our Mathpix challenge. The Mathpix challenge was solved using a Google Cloud Vision Machine Learning API, Crop Hints, which was customized to allow for optimal cropping for any pdf document. So, larger data sets are deconstructed using Crop Hints, processed by existing Mathpix technology, and then the extracted LaTeX code is reconstructed.
