@@ -8,17 +8,15 @@
       </v-toolbar-title>
     </v-app-bar>
 
-    <v-content>
-    </v-content>
+    <v-content></v-content>
   </v-app>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
+  name: "App",
   data: () => ({
     //
-  }),
+  })
 };
 </script>

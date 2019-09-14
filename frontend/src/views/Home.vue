@@ -1,13 +1,9 @@
 <template>
-  <Mathpix />
+  <div>Hello</div>
 </template>
 
 <script>
-import Mathpix from '../components/Mathpix';
-
 export default {
-  components: {
-    Mathpix,
-  },
+  components: {}
 };
 </script>
