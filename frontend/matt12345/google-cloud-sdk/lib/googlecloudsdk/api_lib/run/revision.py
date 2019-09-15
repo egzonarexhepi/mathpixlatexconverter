@@ -1,0 +1,309 @@
+# -*- coding: utf-8 -*- #
+# Copyright 2018 Google LLC. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Wraps a Cloud Run revision message with convenience methods."""
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import unicode_literals
+
+import functools
+from googlecloudsdk.api_lib.run import k8s_object
+
+
+# Label names as to be stored in k8s object metadata
+AUTHOR_ANNOTATION = 'serving.knative.dev/creator'
+SERVICE_LABEL = 'serving.knative.dev/service'
+# Used to force a new revision, and also to tie a particular request for changes
+# to a particular created revision.
+NONCE_LABEL = 'client.knative.dev/nonce'
+
+
+class Revision(k8s_object.KubernetesObject):
+  """Wraps a Cloud Run Revision message, making fields more convenient."""
+
+  API_CATEGORY = 'serving.knative.dev'
+  KIND = 'Revision'
+  READY_CONDITION = 'Ready'
+  _ACTIVE_CONDITION = 'Active'
+  TERMINAL_CONDITIONS = {
+      READY_CONDITION,
+  }
+
+  @property
+  def env_vars(self):
+    """Returns a mutable, dict-like object to manage env vars.
+
+    The returned object can be used like a dictionary, and any modifications to
+    the returned object (i.e. setting and deleting keys) modify the underlying
+    nested env vars fields.
+    """
+    if self.container:
+      return k8s_object.ListAsDictionaryWrapper(
+          self.container.env, self._messages.EnvVar)
+
+  @property
+  def author(self):
+    return self.annotations.get(AUTHOR_ANNOTATION)
+
+  @property
+  def creation_timestamp(self):
+    return self._m.metadata.creationTimestamp
+
+  @property
+  def gcs_location(self):
+    return self._m.status.gcs.location
+
+  @property
+  def service_name(self):
+    return self.labels[SERVICE_LABEL]
+
+  @property
+  def serving_state(self):
+    return self.spec.servingState
+
+  @property
+  def image(self):
+    """URL to container."""
+    return self.container.image
+
+  @image.setter
+  def image(self, value):
+    self.container.image = value
+
+  @property
+  def active(self):
+    cond = self.conditions
+    if self._ACTIVE_CONDITION in cond:
+      return cond[self._ACTIVE_CONDITION]['status']
+    return None
+
+  def _EnsureResources(self):
+    limits_cls = self._messages.ResourceRequirements.LimitsValue
+    if self.container.resources is not None:
+      if self.container.resources.limits is None:
+        self.container.resources.limits = k8s_object.InitializedInstance(
+            limits_cls)
+    else:
+      self.container.resources = k8s_object.InitializedInstance(
+          self._messages.ResourceRequirements)
+    # These fields are in the schema due to an error in interperetation of the
+    # Knative spec. We're removing them, so never send any contents for them.
+    self.container.resources.limitsInMap = None
+    self.container.resources.requestsInMap = None
+
+  def _EnsureMeta(self):
+    if self.metadata is None:
+      self.metadata = self._messages.ObjectMeta()
+    return self.metadata
+
+  @property
+  def container(self):
+    """The container in the revisionTemplate."""
+    if self.spec.container and self.spec.containers:
+      raise ValueError(
+          'Revision can have only one of `container` or `containers` set')
+    elif self.spec.container:
+      return self.spec.container
+    elif self.spec.containers:
+      if self.spec.containers[0] is None or len(self.spec.containers) != 1:
+        raise ValueError('List of containers must contain exactly one element')
+      return self.spec.containers[0]
+    else:
+      raise ValueError('Either `container` or `containers` must be set')
+
+  @property
+  def resource_limits(self):
+    """The resource limits as a dictionary { resource name: limit}."""
+    self._EnsureResources()
+    return k8s_object.ListAsDictionaryWrapper(
+        self.container.resources.limits.additionalProperties,
+        self._messages.ResourceRequirements.LimitsValue.AdditionalProperty,
+        key_field='key',
+        value_field='value',
+    )
+
+  @property
+  def deprecated_string_concurrency(self):
+    """The string-enum concurrency model in the revisionTemplate.
+
+    This is deprecated in favor of the numeric field containerConcurrency
+    """
+    return self.spec.concurrencyModel
+
+  @deprecated_string_concurrency.setter
+  def deprecated_string_concurrency(self, value):
+    self.spec.concurrencyModel = value
+
+  @property
+  def concurrency(self):
+    """The concurrency number in the revisionTemplate.
+
+    0: Multiple concurrency, max unspecified.
+    1: Single concurrency
+    n>1: Allow n simultaneous requests per instance.
+    """
+    return self.spec.containerConcurrency
+
+  @concurrency.setter
+  def concurrency(self, value):
+    self.spec.containerConcurrency = value
+
+  @property
+  def timeout(self):
+    """The timeout number in the revisionTemplate.
+
+    The lib can accept either a duration format like '1m20s' or integer like
+    '80' to set the timeout. The returned object is an integer value, which
+    assumes second the unit, e.g., 80.
+    """
+    return self.spec.timeoutSeconds
+
+  @timeout.setter
+  def timeout(self, value):
+    self.spec.timeoutSeconds = value
+
+  @property
+  def service_account(self):
+    """The service account in the revisionTemplate."""
+    return self.spec.serviceAccountName
+
+  @service_account.setter
+  def service_account(self, value):
+    self.spec.serviceAccountName = value
+
+  @property
+  def image_digest(self):
+    """The URL of the image, by digest. Stable when tags are not."""
+    return self.status.imageDigest
+
+  @property
+  def volumes(self):
+    """Returns a dict-like object to manage volumes.
+
+    There are additional properties on the object (e.g. `.secrets`) that can
+    be used to access a mutable, dict-like object for managing volumes of a
+    given type. Any modifications to the returned object for these properties
+    (i.e. setting and deleting keys) modify the underlying nested volumes.
+    """
+    return VolumesAsDictionaryWrapper(self.spec.volumes, self._messages.Volume)
+
+  @property
+  def volume_mounts(self):
+    """Returns a mutable, dict-like object to manage volume mounts.
+
+    The returned object can be used like a dictionary, and any modifications to
+    the returned object (i.e. setting and deleting keys) modify the underlying
+    nested volume mounts. There are additional properties on the object
+    (e.g. `.secrets` that can be used to access a mutable dict-like object for
+    a volume mounts that mount volumes of a given type.
+    """
+    if self.container:
+      return VolumeMountsAsDictionaryWrapper(self.volumes,
+                                             self.container.volumeMounts,
+                                             self._messages.VolumeMount)
+
+
+class VolumesAsDictionaryWrapper(k8s_object.ListAsReadOnlyDictionaryWrapper):
+  """Wraps a list of volumes in a dict-like object.
+
+  Additionally provides properties to access volumes of specific type in a
+  mutable dict-like object.
+  """
+
+  def __init__(self, volumes_to_wrap, volume_class):
+    """Wrap a list of volumes in a dict-like object.
+
+    Arguments:
+      volumes_to_wrap: list[Volume], list of volumes to treat as a dict.
+      volume_class: type of the underlying Volume objects.
+    """
+    super(VolumesAsDictionaryWrapper, self).__init__(volumes_to_wrap)
+    self._volumes = volumes_to_wrap
+    self._volume_class = volume_class
+
+  @property
+  def secrets(self):
+    """Mutable dict-like object for volumes with a secret source type."""
+    def _FilterSecretVolumes(volume):
+      return volume.secret is not None
+
+    return k8s_object.ListAsDictionaryWrapper(
+        self._volumes,
+        self._volume_class,
+        value_field='secret',
+        filter_func=_FilterSecretVolumes)
+
+  @property
+  def config_maps(self):
+    """Mutable dict-like object for volumes with a config map source type."""
+    def _FilterConfigMapVolumes(volume):
+      return volume.configMap is not None
+
+    return k8s_object.ListAsDictionaryWrapper(
+        self._volumes,
+        self._volume_class,
+        value_field='configMap',
+        filter_func=_FilterConfigMapVolumes)
+
+
+class VolumeMountsAsDictionaryWrapper(k8s_object.ListAsDictionaryWrapper):
+  """Wraps a list of volume mounts in a mutable dict-like object.
+
+  Additionally provides properties to access mounts that are mounting volumes
+  of specific type in a mutable dict-like object.
+  """
+
+  def __init__(self, volumes, mounts_to_wrap, mount_class):
+    """Wrap a list of volume mounts in a mutable dict-like object.
+
+    Forces readOnly=True on creation of new volume mounts.
+
+    Arguments:
+      volumes: associated VolumesAsDictionaryWrapper obj
+      mounts_to_wrap: list[VolumeMount], list of mounts to treat as a dict.
+      mount_class: type of the underlying VolumeMount objects.
+    """
+    super(VolumeMountsAsDictionaryWrapper, self).__init__(
+        mounts_to_wrap,
+        functools.partial(mount_class, readOnly=True),
+        key_field='mountPath',
+        value_field='name')
+    self._volumes = volumes
+
+  @property
+  def secrets(self):
+    """Mutable dict-like object for mounts whose volumes have a secret source type."""
+    def _FilterSecretMounts(mount):
+      return mount.name in self._volumes.secrets
+
+    return k8s_object.ListAsDictionaryWrapper(
+        self._m,
+        self._item_class,
+        key_field=self._key_field,
+        value_field=self._value_field,
+        filter_func=_FilterSecretMounts)
+
+  @property
+  def config_maps(self):
+    """Mutable dict-like object for mounts whose volumes have a config map source type."""
+    def _FilterConfigMapMounts(mount):
+      return mount.name in self._volumes.config_maps
+
+    return k8s_object.ListAsDictionaryWrapper(
+        self._m,
+        self._item_class,
+        key_field=self._key_field,
+        value_field=self._value_field,
+        filter_func=_FilterConfigMapMounts)

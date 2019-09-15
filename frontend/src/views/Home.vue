@@ -171,7 +171,7 @@ export default {
       document.getElementById('file-upload').click();
     },
     sendFile(){
-      const path = 'http://localhost:5000';
+      const path = 'http://localhost:5000/uploads';
       const vm = this;
       if (!vm.chosenFile){
         return;
