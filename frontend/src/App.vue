@@ -43,5 +43,8 @@ export default {
 <style scoped>
   li a{
     text-decoration: none;
+    list-style-type: none;
+    list-style: none;
+
   }
 </style>
