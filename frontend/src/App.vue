@@ -7,9 +7,21 @@
         <span>challenge</span>
       </v-toolbar-title>
 
-      <v-layout justify-end>
-        <router-link to="/">Home</router-link>
-        <router-link to="/about">About</router-link>
+      <v-layout justify-end align-center>
+        <li>
+          <router-link to="/">
+          <v-icon 
+            color="primary"
+            class="ma-md-2" 
+          >
+            mdi-home
+          </v-icon>
+          </router-link>
+        </li>
+
+        <li>
+          <router-link class="mt-md-2" color="black" to="/about">About</router-link>
+        </li>
       </v-layout>
     </v-app-bar>
 
@@ -27,3 +39,9 @@ export default {
   })
 };
 </script>
+
+<style scoped>
+  li a{
+    text-decoration: none;
+  }
+</style>
