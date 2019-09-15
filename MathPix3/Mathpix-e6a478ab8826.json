@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "mathpix",
+  "private_key_id": "e6a478ab88268eefd72447c3446c57db114669f9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC4Vy1vx5o5fuRt\nT3XSN5elmK4HDa7TJ2W9oSnM/7g+Jvly08gJP7qDUdxt3ht1eoYL5ILNodM+DUFn\nKAsVdOvp8P6aOEVQc3WLCVIXZYyWRupNYz3IOPeaeDkfDypXK+WKluV/OHswzhOu\n9S7o9Z57AeH5QGiTVsZPZWihw7bv11tB6I3ASZcPkqKz2Y30cDPK2Gzz0AWFpau4\nTQHNyW1kWcrduolJ9Sfz8RzHD7YXq8qELF/I0rC/iXIVaLixDvZdegWu3I7s/Lzs\nUnQjlNqL2fWcuCot8xpd75Peur+GimPTQI8ShhcHjD8zcMGdkfikoM+UlqM5SYOc\nf+E/hLmnAgMBAAECggEABtoWskT1EpYI35dIhdvTIzCdp1121hpsybOn3hrTOlww\ngXglw1I/GIp+awcKdj9rpB2GTyZot7G+cJsobk++RR/UFt9olCj2gYiDKKN5qkxQ\ngTfjIAIeEfvOA72IkVzsV05skWIEEjhWuvYaHEak8WWMhLtEJ9Xd4S2fygOAVUHX\npe5MIvvnW1eRmwAuLMIrIASXXQb2/o1GKYe/pmfEIdsO2t1L4JIsj+YO7Xlt5Pev\nrKV/krbwXm2m/zvxUUMWDQPVIbJtzoKvpgfKXGYi/VykuBMqFFoiyfWaTEaQU9og\nYok0W+o2be1BPqjqBjKI+lnYC+9iuWBdskfib5I1wQKBgQD94iV8b68s8U5pF9H9\nkxgQSNVoPHKwysXNGjwwoO/4OHw7TC6zUMsBybMTm8amL6AnX7v0B0nxsb/Cu1j5\nGd6EkwNwtSLX37JxFZYOS46NyPs3nuW9F6TpnXoMR5QYrqUzTigEUAIeEWU6kkQQ\nJYEdkDPFGGOs/1ynNfDgv7RTLwKBgQC54JvBu17lyKAvQDP/rWTDA+7n9iyRGkSu\nZswslmvlqGCjizmTx8RNdg1lspqttds6b/sd938sn9xzkT2CgvgwNDJCAOrzEJnw\nH/APpl6j1CS5SsKld2Lg34ZRKpty4pEXpiMqzMEZUJAyCZ4eb5mPUlfFW+QTJq8q\nT0XIpf/DCQKBgQD9SWwKnEXQ+aE3mcsnR2PfgzpddskZdgMm34CjJzyhkIDoi9Wf\nkgAmdXsSGfxyeds2zPzvtYHg/muItG5MfrGP5Devbxcm9YbJ6TY+ZsT+0T9IO1+K\nahdd9nz32UV35mzsJZIo00V5h/NNHvWGglQxEVeE0BNJWa6vJ1J8duVJgwKBgQCY\nIFi5vOUVARcAtPYZykqORPjRhavB8hLF/cIat92Er0KwdvDfnv5tOzIJypxHkW/k\nKuQGCZpe5lMhjnweBZykrwN2+5NO7YZffXQXCt2oDacksygNDmGxk581bL6ezwla\nppFfpQZg9oudODvdww6Vuxm0n9lRRzbTVN/TMPDbKQKBgQCNZkIIKLAlrEUz37vI\n/XtS1mjl/z91cX/xM6gLEPVnSb62rKb300bDYkp7P0hEybbzqcktFbq9inAaeWgW\n6Nzj7cm6jKjSrohQ3YDU4TTcQoA8bIitNUWnJuQsYbh4BRJ8+gnEvIsgATG8Im2/\nGryatFfi+V5i2/Ij8PMfsxeGCw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "pdfbreaker@mathpix.iam.gserviceaccount.com",
+  "client_id": "107929399130039832727",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/pdfbreaker%40mathpix.iam.gserviceaccount.com"
+}
