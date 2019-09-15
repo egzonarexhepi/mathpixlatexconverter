@@ -4,7 +4,7 @@
       <v-layout row class="pa-md-6">
           <v-flex md12>
             <div class="text-md-center">
-              <h3 class="display-3" 
+              <h3 class="display-3"
               font-weight:bold>
               Mathpix snip</h3>
             </div>
@@ -15,23 +15,23 @@
       <v-layout row class="pa-md-6">
         <v-flex md12>
           <div class="text-md-center">
-              <v-btn 
-                large 
-                color="primary" 
-                class="ma-sm-4" 
+              <v-btn
+                large
+                color="primary"
+                class="ma-sm-4"
                 @click="openFileDialog"
               >
                 Upload
                 <v-icon right dark> mdi-cloud-upload</v-icon>
               </v-btn>
-              <input 
-                type="file" 
-                id="file-upload" 
+              <input
+                type="file"
+                id="file-upload"
                 ref="file"
-                style="display:none" 
+                style="display:none"
                 v-on:change="handleFileUpload()"
               >
-              <v-btn large text color="primary">Extract</v-btn>
+              <v-btn large text color="primary" @click="sendFile()">Extract</v-btn>
           </div>
         </v-flex>
       </v-layout>
@@ -43,7 +43,7 @@
       <v-row justify="center">
         <v-col cols="6" md="4">
           <v-card height="420" width="550" class="pa-2" outlined tile>
-            <PDFDocument v-bind="{url, scale}" />            
+            <PDFDocument v-bind="{url, scale}" />
               <v-img contain height="400" width="500" v-show="showPreview" :src="imagePreview"></v-img>
           </v-card>
         </v-col>
@@ -58,23 +58,23 @@
     <v-card max-width="600" class="mx-auto mt-md-10 mb-md-10">
       <v-card-title>
         <div class="text-center">
-          <v-btn 
+          <v-btn
             text
             :class="{isblack : lat}"
             @click="buttonChange"
           >
             Latex
           </v-btn>
-        </div>  
+        </div>
         <div class="text-center">
-          <v-btn 
+          <v-btn
             text
             :class="{isblack : ur}"
             @click="buttonChange"
           >
             URLs
           </v-btn>
-        </div>  
+        </div>
       </v-card-title>
       <v-card-text>
           <v-data-table
@@ -89,6 +89,7 @@
             }"
             :items-per-page="4"
           >
+            <v-icon>mdi-copy</v-icon>
           </v-data-table>
 
       </v-card-text>
@@ -118,11 +119,13 @@
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
   name: "App",
   data: () => ({
-    file: '',
+    msg: '',
+    chosenFile: '',
     showPreview: false,
     imagePreview: '',
     confidence: 70,
@@ -153,20 +156,56 @@ export default {
   }),
 
   methods : {
+    getData(){
+      const path = 'http://localhost:5000/'
+      const vm = this;
+      axios.get(path)
+      .then((res) => {
+        vm.msg = res.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    },
     openFileDialog(){
       document.getElementById('file-upload').click();
     },
-    handleFileUpload(){
-      this.file = this.$refs.file.files[0];
-      let reader  = new FileReader();
-      reader.addEventListener("load", function () {
-        this.showPreview = true;
-        this.imagePreview = reader.result;
-      }.bind(this), false);
-    
-      if( this.file ){
-        reader.readAsDataURL( this.file );
+    sendFile(){
+      const path = 'http://localhost:5000';
+      const vm = this;
+      if (!vm.chosenFile){
+        return;
+      }
+      let formData = new FormData();
+      formData.append('file', vm.chosenFile);
+      axios.post( path,
+        formData,
+        {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
         }
+      ).then(function(){
+        console.log('succeeded');
+      })
+      .catch(function(){
+        console.log('failed');
+      });
+
+    },
+    handleFileUpload(){
+      const vm = this;
+      vm.chosenFile = vm.$refs.file;
+      let reader  = new FileReader();
+      // reader.addEventListener("load", function () {
+      //   vm.showPreview = true;
+      //   vm.imagePreview = reader.result;
+      // }.bind(vm), false);
+
+      // if( vm.file ){
+      //   reader.readAsDataURL( vm.file );
+      //   }
+        console.log("the file is here: "+ vm.file)
     },
     buttonChange(){
       const vm = this;
@@ -174,27 +213,6 @@ export default {
       vm.lat = !vm.lat;
     }
   },
-
-    // onFileChange(e) {
-    //   const vm = this;
-    //   var files = e.target.files || e.dataTransfer.files;       
-    //   if(files.length > 0){
-    //     for(var i = 0; i< files.length; i++){
-    //         vm.formData.append("file", files[i], files[i].name);
-    //     }
-    //   }
-    //   console.log(vm.formData);
-    // },
-    // uploadFile() {
-    //   const vm = this; 
-    //   axios.post('URL', vm.formData).then(function (response) {
-    //       console.log(response);
-    //   }).catch(function (error) {
-    //       console.log(error);
-    //   });
-    //   console.log(JSON.stringify(vm.formData));
-    // },
-    //}
 };
 </script>
 
