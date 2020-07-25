@@ -93,7 +93,7 @@ class AuditLogConfig(_messages.Message):
 
 class AuthorizedDomain(_messages.Message):
   r"""A domain that a user has been authorized to administer. To authorize use
-  of a domain, verify ownership via [Webmaster
+  of a domain, verify ownership via [Webmain
   Central](https://www.google.com/webmasters/verification/home).
 
   Fields:
@@ -295,7 +295,7 @@ class Configuration(_messages.Message):
   built. Users create new Revisions by updating the Configuration's spec. The
   "latest created" revision's name is available under status, as is the
   "latest ready" revision's name. See also: https://github.com/knative/serving
-  /blob/master/docs/spec/overview.md#configuration
+  /blob/main/docs/spec/overview.md#configuration
 
   Fields:
     apiVersion: The API version for this call such as

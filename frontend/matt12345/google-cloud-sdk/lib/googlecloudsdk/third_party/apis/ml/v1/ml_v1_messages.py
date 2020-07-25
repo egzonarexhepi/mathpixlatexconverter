@@ -1346,23 +1346,23 @@ class GoogleCloudMlV1TrainingInput(_messages.Message):
       TensorFlow program as the '--job-dir' command-line argument. The benefit
       of specifying this field is that Cloud ML validates the path for use in
       training.
-    masterConfig: Optional. The configuration for your master worker.  You
-      should only set `masterConfig.acceleratorConfig` if `masterType` is set
+    mainConfig: Optional. The configuration for your main worker.  You
+      should only set `mainConfig.acceleratorConfig` if `mainType` is set
       to a Compute Engine machine type. Learn about [restrictions on
       accelerator configurations for training.](/ml-engine/docs/tensorflow
       /using-gpus#compute-engine-machine-types-with-gpu)  Set
-      `masterConfig.imageUri` only if you build a custom image. Only one of
-      `masterConfig.imageUri` and `runtimeVersion` should be set. Learn more
+      `mainConfig.imageUri` only if you build a custom image. Only one of
+      `mainConfig.imageUri` and `runtimeVersion` should be set. Learn more
       about [configuring custom containers](/ml-engine/docs/distributed-
       training-containers).
-    masterType: Optional. Specifies the type of virtual machine to use for
-      your training job's master worker.  The following types are supported:
+    mainType: Optional. Specifies the type of virtual machine to use for
+      your training job's main worker.  The following types are supported:
       <dl>   <dt>standard</dt>   <dd>   A basic machine configuration suitable
       for training simple models with   small to moderate datasets.   </dd>
       <dt>large_model</dt>   <dd>   A machine with a lot of memory, specially
       suited for parameter servers   when your model is large (having many
       hidden layers or layers with very   large numbers of nodes).   </dd>
-      <dt>complex_model_s</dt>   <dd>   A machine suitable for the master and
+      <dt>complex_model_s</dt>   <dd>   A machine suitable for the main and
       workers of the cluster when your   model requires more computation than
       the standard machine can handle   satisfactorily.   </dd>
       <dt>complex_model_m</dt>   <dd>   A machine with roughly twice the
@@ -1412,7 +1412,7 @@ class GoogleCloudMlV1TrainingInput(_messages.Message):
       with-gpu)  Set `parameterServerConfig.imageUri` only if you build a
       custom image for your parameter server. If
       `parameterServerConfig.imageUri` has not been set, AI Platform uses the
-      value of `masterConfig.imageUri`. Learn more about [configuring custom
+      value of `mainConfig.imageUri`. Learn more about [configuring custom
       containers](/ml-engine/docs/distributed-training-containers).
     parameterServerCount: Optional. The number of parameter server replicas to
       use for the training job. Each replica in the cluster will be of the
@@ -1421,8 +1421,8 @@ class GoogleCloudMlV1TrainingInput(_messages.Message):
       also set `parameter_server_type`.  The default value is zero.
     parameterServerType: Optional. Specifies the type of virtual machine to
       use for your training job's parameter server.  The supported values are
-      the same as those described in the entry for `master_type`.  This value
-      must be consistent with the category of machine type that `masterType`
+      the same as those described in the entry for `main_type`.  This value
+      must be consistent with the category of machine type that `mainType`
       uses. In other words, both must be AI Platform machine types or both
       must be Compute Engine machine types.  This value must be present when
       `scaleTier` is set to `CUSTOM` and `parameter_server_count` is greater
@@ -1451,7 +1451,7 @@ class GoogleCloudMlV1TrainingInput(_messages.Message):
       #compute-engine-machine-types-with-gpu)  Set `workerConfig.imageUri`
       only if you build a custom image for your worker. If
       `workerConfig.imageUri` has not been set, AI Platform uses the value of
-      `masterConfig.imageUri`. Learn more about [configuring custom containers
+      `mainConfig.imageUri`. Learn more about [configuring custom containers
       ](/ml-engine/docs/distributed-training-containers).
     workerCount: Optional. The number of worker replicas to use for the
       training job. Each replica in the cluster will be of the type specified
@@ -1460,8 +1460,8 @@ class GoogleCloudMlV1TrainingInput(_messages.Message):
       The default value is zero.
     workerType: Optional. Specifies the type of virtual machine to use for
       your training job's worker nodes.  The supported values are the same as
-      those described in the entry for `masterType`.  This value must be
-      consistent with the category of machine type that `masterType` uses. In
+      those described in the entry for `mainType`.  This value must be
+      consistent with the category of machine type that `mainType` uses. In
       other words, both must be AI Platform machine types or both must be
       Compute Engine machine types.  If you use `cloud_tpu` for this value,
       see special instructions for [configuring a custom TPU machine](/ml-
@@ -1487,8 +1487,8 @@ class GoogleCloudMlV1TrainingInput(_messages.Message):
       CUSTOM: The CUSTOM tier is not a set tier, but rather enables you to use
         your own cluster specification. When you use this tier, set values to
         configure your processing cluster according to these guidelines:  *
-        You _must_ set `TrainingInput.masterType` to specify the type     of
-        machine to use for your master node. This is the only required
+        You _must_ set `TrainingInput.mainType` to specify the type     of
+        machine to use for your main node. This is the only required
         setting.  *   You _may_ set `TrainingInput.workerCount` to specify the
         number of     workers to use. If you specify one or more workers, you
         _must_ also     set `TrainingInput.workerType` to specify the type of
@@ -1498,9 +1498,9 @@ class GoogleCloudMlV1TrainingInput(_messages.Message):
         servers, you _must_ also set     `TrainingInput.parameterServerType`
         to specify the type of machine to     use for your parameter servers.
         Note that all of your workers must use the same machine type, which
-        can be different from your parameter server type and master type. Your
+        can be different from your parameter server type and main type. Your
         parameter servers must likewise use the same machine type, which can
-        be different from your worker type and master type.
+        be different from your worker type and main type.
     """
     BASIC = 0
     STANDARD_1 = 1
@@ -1512,8 +1512,8 @@ class GoogleCloudMlV1TrainingInput(_messages.Message):
   args = _messages.StringField(1, repeated=True)
   hyperparameters = _messages.MessageField('GoogleCloudMlV1HyperparameterSpec', 2)
   jobDir = _messages.StringField(3)
-  masterConfig = _messages.MessageField('GoogleCloudMlV1ReplicaConfig', 4)
-  masterType = _messages.StringField(5)
+  mainConfig = _messages.MessageField('GoogleCloudMlV1ReplicaConfig', 4)
+  mainType = _messages.StringField(5)
   packageUris = _messages.StringField(6, repeated=True)
   parameterServerConfig = _messages.MessageField('GoogleCloudMlV1ReplicaConfig', 7)
   parameterServerCount = _messages.IntegerField(8)

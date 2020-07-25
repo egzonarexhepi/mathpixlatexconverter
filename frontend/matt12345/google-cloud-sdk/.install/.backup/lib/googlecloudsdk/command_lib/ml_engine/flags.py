@@ -58,7 +58,7 @@ trainingInput:format='table[box,title="Training Input Summary"](
   pythonModule,
   parameterServerType:optional,
   parameterServerCount:optional,
-  masterType:optional,
+  mainType:optional,
   workerType:optional,
   workerCount:optional,
   jobDir:optional
@@ -539,9 +539,9 @@ The count of the accelerator must be greater than 0.
 
 def AddCustomContainerFlags(parser, support_tpu_tf_version=False):
   """Add Custom container flags to parser."""
-  GetMasterMachineType().AddToParser(parser)
-  GetMasterAccelerator().AddToParser(parser)
-  GetMasterImageUri().AddToParser(parser)
+  GetMainMachineType().AddToParser(parser)
+  GetMainAccelerator().AddToParser(parser)
+  GetMainImageUri().AddToParser(parser)
   GetParameterServerMachineTypeConfig().AddToParser(parser)
   GetParameterServerAccelerator().AddToParser(parser)
   GetParameterServerImageUri().AddToParser(parser)
@@ -605,32 +605,32 @@ def _MakeAcceleratorArgConfigArg(arg_name, arg_help, required=False):
   return arg
 
 
-def GetMasterMachineType():
-  """Build master-machine-type flag."""
+def GetMainMachineType():
+  """Build main-machine-type flag."""
   help_text = """\
-  Specifies the type of virtual machine to use for training job's master worker.
+  Specifies the type of virtual machine to use for training job's main worker.
 
   You must set this value when `--scale-tier` is set to `CUSTOM`.
   """
   return base.Argument(
-      '--master-machine-type', required=False, help=help_text)
+      '--main-machine-type', required=False, help=help_text)
 
 
-def GetMasterAccelerator():
-  """Build master-accelerator flag."""
-  help_text = _ACCELERATOR_TYPE_HELP.format(worker_type='master worker')
+def GetMainAccelerator():
+  """Build main-accelerator flag."""
+  help_text = _ACCELERATOR_TYPE_HELP.format(worker_type='main worker')
   return _MakeAcceleratorArgConfigArg(
-      '--master-accelerator', arg_help=help_text)
+      '--main-accelerator', arg_help=help_text)
 
 
-def GetMasterImageUri():
-  """Build master-image-uri flag."""
+def GetMainImageUri():
+  """Build main-image-uri flag."""
   return base.Argument(
-      '--master-image-uri',
+      '--main-image-uri',
       required=False,
-      help=('Docker image to run on each master worker. '
+      help=('Docker image to run on each main worker. '
             'This image must be in Google Container Registry. Only one of '
-            '`--master-image-uri` and `--runtime-version` must be specified.'))
+            '`--main-image-uri` and `--runtime-version` must be specified.'))
 
 
 def GetParameterServerMachineTypeConfig():
@@ -671,7 +671,7 @@ def GetParameterServerImageUri():
       required=False,
       help=('Docker image to run on each parameter server. '
             'This image must be in Google Container Registry. If not '
-            'specified, the value of `--master-image-uri` is used.'))
+            'specified, the value of `--main-image-uri` is used.'))
 
 
 def GetWorkerMachineConfig():
@@ -711,7 +711,7 @@ def GetWorkerImageUri():
       required=False,
       help=('Docker image to run on each worker node. '
             'This image must be in Google Container Registry. If not '
-            'specified, the value of `--master-image-uri` is used.'))
+            'specified, the value of `--main-image-uri` is used.'))
 
 
 def GetTpuTfVersion():

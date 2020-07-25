@@ -64,7 +64,7 @@ class InvalidRepositoryError(exceptions.Error):
   """Attempted to fetch or clone from a repository missing something basic.
 
   This gets raised if we try to fetch or clone from a repo that is either
-  missing a HEAD or missing both a "latest" tag and a master branch.
+  missing a HEAD or missing both a "latest" tag and a main branch.
   """
 
 
@@ -149,7 +149,7 @@ def _PullTags(local_repo, client_wrapper, target_dir):
 
   Returns:
     (str, dulwich.objects.Commit) The tag that was actually pulled (we try to
-    get "latest" but fall back to "master") and the commit object
+    get "latest" but fall back to "main") and the commit object
     associated with it.
 
   Raises:
@@ -166,7 +166,7 @@ def _PullTags(local_repo, client_wrapper, target_dir):
   # Try to get the "latest" tag (latest released version)
   revision = None
   tag = None
-  for tag in (b'refs/tags/latest', b'refs/heads/master'):
+  for tag in (b'refs/tags/latest', b'refs/heads/main'):
     try:
       log.debug('looking up ref %s', tag)
       revision = local_repo[tag]
@@ -175,7 +175,7 @@ def _PullTags(local_repo, client_wrapper, target_dir):
       log.warning('Unable to checkout branch %s', tag)
 
   else:
-    raise AssertionError('No "refs/heads/master" tag found in repository.')
+    raise AssertionError('No "refs/heads/main" tag found in repository.')
 
   return tag, revision
 
@@ -262,7 +262,7 @@ def InstallRuntimeDef(url, target_dir):
   directory.  At this time, the runtime definition url must be the URL of a
   git repository and we identify the tree to checkout based on 1) the presence
   of a "latest" tag ("refs/tags/latest") 2) if there is no "latest" tag, the
-  head of the "master" branch ("refs/heads/master").
+  head of the "main" branch ("refs/heads/main").
 
   Args:
     url: (str) A URL identifying a git repository.  The HTTP, TCP and local

@@ -38,7 +38,7 @@ CLUSTERS_FORMAT = """
     table(
         name,
         zone:label=LOCATION,
-        master_version():label=MASTER_VERSION,
+        main_version():label=MASTER_VERSION,
         endpoint:label=MASTER_IP,
         nodePools[0].config.machineType,
         currentNodeVersion:label=NODE_VERSION,
@@ -315,7 +315,7 @@ class ClusterConfig(object):
         'project_id': project_id,
         'server': 'https://' + endpoint,
     }
-    auth = cluster.masterAuth
+    auth = cluster.mainAuth
     if auth and auth.clusterCaCertificate:
       kwargs['ca_data'] = auth.clusterCaCertificate
     else:

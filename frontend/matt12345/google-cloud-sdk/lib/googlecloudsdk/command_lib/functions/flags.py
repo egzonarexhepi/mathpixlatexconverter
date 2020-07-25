@@ -189,9 +189,9 @@ def AddSourceFlag(parser):
       `https://source.developers.google.com/projects/${PROJECT}/repos/${REPO}`
 
       By using the URL above, sources from the root directory of the repository
-      on the revision tagged `master` will be used.
+      on the revision tagged `main` will be used.
 
-      If you want to deploy from a revision different from `master`, append one
+      If you want to deploy from a revision different from `main`, append one
       of the following three sources to the URL:
 
       * `/revisions/${REVISION}`,

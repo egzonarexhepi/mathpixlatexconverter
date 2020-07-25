@@ -251,7 +251,7 @@ def _AuthProvider(name='gcp'):
 
   Constructs an auth provider config entry readable by kubectl. This tells
   kubectl to call out to a specific gcloud command and parse the output to
-  retrieve access tokens to authenticate to the kubernetes master.
+  retrieve access tokens to authenticate to the kubernetes main.
   Kubernetes gcp auth provider plugin at
   https://github.com/kubernetes/kubernetes/tree/master/staging/src/k8s.io/client-go/plugin/pkg/client/auth/gcp
 

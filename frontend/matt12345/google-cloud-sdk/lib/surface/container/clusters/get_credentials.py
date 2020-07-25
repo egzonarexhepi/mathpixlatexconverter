@@ -100,7 +100,7 @@ class GetCredentials(base.Command):
     log.status.Print('Fetching cluster endpoint and auth data.')
     # Call DescribeCluster to get auth info and cache for next time
     cluster = adapter.GetCluster(cluster_ref)
-    auth = cluster.masterAuth
+    auth = cluster.mainAuth
     # TODO(b/70856999) Make this consistent with the checks in
     # api_lib/container/kubeconfig.py.
     missing_creds = not (auth and auth.clientCertificate and auth.clientKey)

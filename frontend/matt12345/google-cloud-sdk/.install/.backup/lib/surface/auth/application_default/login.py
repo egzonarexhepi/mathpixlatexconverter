@@ -55,7 +55,7 @@ class Login(base.Command):
   instructions at
   https://developers.google.com/identity/protocols/application-default-credentials#calling.
 
-  API enablement and quotas are managed by the master Application Default
+  API enablement and quotas are managed by the main Application Default
   Credentials project. In the case of errors related to the API not being
   enabled or quota limitations, use the `--client-id-file` flag. You can create
   the client-id-file at https://console.cloud.google.com/apis/credentials.

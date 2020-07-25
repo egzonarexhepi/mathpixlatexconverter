@@ -161,7 +161,7 @@ class DatabaseInstance(_messages.Message):
     ipAddresses: The assigned IP addresses for the instance.
     ipv6Address: The IPv6 address assigned to the instance.
     kind: This is always sql#instance.
-    masterInstanceName: The name of the instance which will act as master in
+    mainInstanceName: The name of the instance which will act as main in
       the replication setup.
     maxDiskSize: The maximum disk size of the instance in bytes.
     project: The project ID of the project containing the Cloud SQL instance.
@@ -191,7 +191,7 @@ class DatabaseInstance(_messages.Message):
   ipAddresses = _messages.MessageField('IpMapping', 7, repeated=True)
   ipv6Address = _messages.StringField(8)
   kind = _messages.StringField(9, default=u'sql#instance')
-  masterInstanceName = _messages.StringField(10)
+  mainInstanceName = _messages.StringField(10)
   maxDiskSize = _messages.IntegerField(11)
   project = _messages.StringField(12)
   region = _messages.StringField(13)

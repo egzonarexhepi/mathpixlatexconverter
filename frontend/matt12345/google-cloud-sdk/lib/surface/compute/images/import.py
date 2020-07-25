@@ -40,7 +40,7 @@ from googlecloudsdk.core.console import progress_tracker
 import six
 
 _WORKFLOWS_URL = ('https://github.com/GoogleCloudPlatform/compute-image-tools/'
-                  'tree/master/daisy_workflows/image_import')
+                  'tree/main/daisy_workflows/image_import')
 _OUTPUT_FILTER = ['[Daisy', '[import-', 'starting build', '  import', 'ERROR']
 
 

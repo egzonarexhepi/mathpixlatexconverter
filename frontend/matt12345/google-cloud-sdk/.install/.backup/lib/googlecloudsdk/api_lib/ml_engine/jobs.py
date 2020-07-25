@@ -224,8 +224,8 @@ class JobsClient(object):
     return bool(job.trainingInput.packageUris)
 
   def IsCustomContainerTraining(self, job):
-    return bool(job.trainingInput.masterConfig and
-                job.trainingInput.masterConfig.imageUri)
+    return bool(job.trainingInput.mainConfig and
+                job.trainingInput.mainConfig.imageUri)
 
   def BuildBatchPredictionJob(self,
                               job_name=None,

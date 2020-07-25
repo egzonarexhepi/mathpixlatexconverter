@@ -42,8 +42,8 @@ source_suffix = '.rst'
 # The encoding of source files.
 # source_encoding = 'utf-8-sig'
 
-# The master toctree document.
-master_doc = 'contents'
+# The main toctree document.
+main_doc = 'contents'
 
 # General information about the project.
 project = u'ASN.1 types and codecs'
@@ -242,7 +242,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'PyASN1.tex', u'PyASN1 Documentation',
+    (main_doc, 'PyASN1.tex', u'PyASN1 Documentation',
      u'Ilya Etingof \\textless{}etingof@gmail.com\\textgreater{}', 'manual'),
 ]
 
@@ -272,7 +272,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pyasn1', u'PyASN1 Documentation',
+    (main_doc, 'pyasn1', u'PyASN1 Documentation',
      [author], 1)
 ]
 
@@ -286,7 +286,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PyASN1', u'PyASN1 Documentation',
+    (main_doc, 'PyASN1', u'PyASN1 Documentation',
      author, 'PyASN1', 'One line description of project.',
      'Miscellaneous'),
 ]

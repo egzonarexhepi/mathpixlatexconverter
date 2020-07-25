@@ -149,7 +149,7 @@ there is no need to call DeleteOperation.
     )
 
     def Failover(self, request, global_params=None):
-      r"""Initiates a failover of the master node to current replica node for a.
+      r"""Initiates a failover of the main node to current replica node for a.
 specific STANDARD tier Cloud Memorystore for Redis instance.
 
       Args:

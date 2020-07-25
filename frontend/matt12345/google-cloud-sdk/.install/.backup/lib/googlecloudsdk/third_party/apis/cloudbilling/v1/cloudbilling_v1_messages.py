@@ -132,9 +132,9 @@ class BillingAccount(_messages.Message):
   Fields:
     displayName: The display name given to the billing account, such as `My
       Billing Account`. This name is displayed in the GCP Console.
-    masterBillingAccount: If this account is a
+    mainBillingAccount: If this account is a
       [subaccount](https://cloud.google.com/billing/docs/concepts), then this
-      will be the resource name of the master billing account that it is being
+      will be the resource name of the main billing account that it is being
       resold through. Otherwise this will be empty.
     name: The resource name of the billing account. The resource name has the
       form `billingAccounts/{billing_account_id}`. For example,
@@ -147,7 +147,7 @@ class BillingAccount(_messages.Message):
   """
 
   displayName = _messages.StringField(1)
-  masterBillingAccount = _messages.StringField(2)
+  mainBillingAccount = _messages.StringField(2)
   name = _messages.StringField(3)
   open = _messages.BooleanField(4)
 
@@ -236,7 +236,7 @@ class CloudbillingBillingAccountsListRequest(_messages.Message):
       this only supports filtering for
       [subaccounts](https://cloud.google.com/billing/docs/concepts) under a
       single provided reseller billing account. (e.g.
-      "master_billing_account=billingAccounts/012345-678901-ABCDEF"). Boolean
+      "main_billing_account=billingAccounts/012345-678901-ABCDEF"). Boolean
       algebra and other fields are not currently supported.
     pageSize: Requested page size. The maximum page size is 100; this is also
       the default.
