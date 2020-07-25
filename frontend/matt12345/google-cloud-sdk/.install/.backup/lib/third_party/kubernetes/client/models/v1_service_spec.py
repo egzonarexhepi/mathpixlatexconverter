@@ -124,7 +124,7 @@ class V1ServiceSpec(object):
     """
         Gets the cluster_ip of this V1ServiceSpec.
         clusterIP is the IP address of the service and is usually assigned
-        randomly by the master. If an address is specified manually and is not
+        randomly by the main. If an address is specified manually and is not
         in use by others, it will be allocated to the service; otherwise,
         creation of the service will fail. This field can not be changed through
         updates. Valid values are \"None\", empty string (\"\"), or a valid IP
@@ -143,7 +143,7 @@ class V1ServiceSpec(object):
     """
         Sets the cluster_ip of this V1ServiceSpec.
         clusterIP is the IP address of the service and is usually assigned
-        randomly by the master. If an address is specified manually and is not
+        randomly by the main. If an address is specified manually and is not
         in use by others, it will be allocated to the service; otherwise,
         creation of the service will fail. This field can not be changed through
         updates. Valid values are \"None\", empty string (\"\"), or a valid IP

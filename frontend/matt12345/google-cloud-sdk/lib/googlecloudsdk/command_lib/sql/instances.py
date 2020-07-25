@@ -386,10 +386,10 @@ class _BaseInstances(object):
 
     instance_resource.region = reducers.Region(args.region, _GetZone(args))
     instance_resource.databaseVersion = args.database_version
-    instance_resource.masterInstanceName = args.master_instance_name
+    instance_resource.mainInstanceName = args.main_instance_name
     instance_resource.rootPassword = args.root_password
 
-    # BETA: Set the host port and return early if external master instance.
+    # BETA: Set the host port and return early if external main instance.
     if _IsBetaOrNewer(release_track) and args.IsSpecified('source_ip_address'):
       on_premises_configuration = reducers.OnPremisesConfiguration(
           sql_messages, args.source_ip_address, args.source_port)
@@ -399,7 +399,7 @@ class _BaseInstances(object):
     instance_resource.settings = cls._ConstructCreateSettingsFromArgs(
         sql_messages, args, original, release_track)
 
-    if args.master_instance_name:
+    if args.main_instance_name:
       replication = 'ASYNCHRONOUS'
       if args.replica_type == 'FAILOVER':
         instance_resource.replicaConfiguration = (
@@ -414,30 +414,30 @@ class _BaseInstances(object):
           sql_messages.DatabaseInstance.FailoverReplicaValue(
               name=args.failover_replica_name))
 
-    # BETA: Config for creating a replica of an external master instance.
-    if _IsBetaOrNewer(release_track) and args.IsSpecified('master_username'):
-      # Ensure that the master instance name is specified.
-      if not args.IsSpecified('master_instance_name'):
+    # BETA: Config for creating a replica of an external main instance.
+    if _IsBetaOrNewer(release_track) and args.IsSpecified('main_username'):
+      # Ensure that the main instance name is specified.
+      if not args.IsSpecified('main_instance_name'):
         raise exceptions.RequiredArgumentException(
-            '--master-instance-name', 'To create a read replica of an external '
-            'master instance, [--master-instance-name] must be specified')
+            '--main-instance-name', 'To create a read replica of an external '
+            'main instance, [--main-instance-name] must be specified')
 
       # TODO(b/78648703): Remove when mutex required status is fixed.
-      # Ensure that the master replication user password is specified.
-      if not (args.IsSpecified('master_password') or
-              args.IsSpecified('prompt_for_master_password')):
+      # Ensure that the main replication user password is specified.
+      if not (args.IsSpecified('main_password') or
+              args.IsSpecified('prompt_for_main_password')):
         raise exceptions.RequiredArgumentException(
-            '--master-password', 'To create a read replica of an external '
-            'master instance, [--master-password] or '
-            '[--prompt-for-master-password] must be specified')
+            '--main-password', 'To create a read replica of an external '
+            'main instance, [--main-password] or '
+            '[--prompt-for-main-password] must be specified')
 
       # Get password if not specified on command line.
-      if args.prompt_for_master_password:
-        args.master_password = getpass.getpass('Master Instance Password: ')
+      if args.prompt_for_main_password:
+        args.main_password = getpass.getpass('Main Instance Password: ')
 
       instance_resource.replicaConfiguration = reducers.ReplicaConfiguration(
-          sql_messages, args.master_username, args.master_password,
-          args.master_dump_file_path, args.master_ca_certificate_path,
+          sql_messages, args.main_username, args.main_password,
+          args.main_dump_file_path, args.main_ca_certificate_path,
           args.client_certificate_path, args.client_key_path)
 
     # ALPHA args.

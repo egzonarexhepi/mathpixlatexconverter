@@ -1084,7 +1084,7 @@ class UIController(object):
 
 
 class MainThreadUIQueue(object):
-  """Handles status display and processing in the main thread / master process.
+  """Handles status display and processing in the main thread / main process.
 
   This class emulates a queue to cover main-thread activity before or after
   Apply, as well as for the single-threaded, single-process case, i.e.,

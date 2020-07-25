@@ -53,19 +53,19 @@ To upgrade nodes to the latest available version, run
 
 
 class VersionVerifier(object):
-  """Compares the cluster and master versions for upgrade availablity."""
+  """Compares the cluster and main versions for upgrade availablity."""
   UP_TO_DATE = 0
   UPGRADE_AVAILABLE = 1
   SUPPORT_ENDING = 2
   UNSUPPORTED = 3
 
-  def Compare(self, current_master_version, current_cluster_version):
-    """Compares the cluster and master versions and returns an enum."""
-    if current_master_version == current_cluster_version:
+  def Compare(self, current_main_version, current_cluster_version):
+    """Compares the cluster and main versions and returns an enum."""
+    if current_main_version == current_cluster_version:
       return self.UP_TO_DATE
-    master_version = SemVer(current_master_version)
+    main_version = SemVer(current_main_version)
     cluster_version = SemVer(current_cluster_version)
-    major, minor, _ = master_version.Distance(cluster_version)
+    major, minor, _ = main_version.Distance(cluster_version)
     if major != 0 or minor > 2:
       return self.UNSUPPORTED
     elif minor > 1:
@@ -78,8 +78,8 @@ def ParseUpgradeOptionsBase(args):
   """Parses the flags provided with the cluster upgrade command."""
   return api_adapter.UpdateClusterOptions(
       version=args.cluster_version,
-      update_master=args.master,
-      update_nodes=(not args.master),
+      update_main=args.main,
+      update_nodes=(not args.main),
       node_pool=args.node_pool,
       image_type=args.image_type,
       image=args.image,
@@ -102,7 +102,7 @@ def _Args(parser):
 The Kubernetes release version to which to upgrade the cluster's nodes.
 
 If desired cluster version is omitted, *node* upgrades default to the current
-*master* version and *master* upgrades default to the default cluster version,
+*main* version and *main* upgrades default to the default cluster version,
 which can be found in the server config.
 
 You can find the list of allowed versions for upgrades by running:
@@ -111,10 +111,10 @@ You can find the list of allowed versions for upgrades by running:
 """)
   parser.add_argument('--node-pool', help='The node pool to upgrade.')
   parser.add_argument(
-      '--master',
-      help='Upgrade the cluster\'s master to the latest version of Kubernetes'
+      '--main',
+      help='Upgrade the cluster\'s main to the latest version of Kubernetes'
       ' supported on Kubernetes Engine. Nodes cannot be upgraded at the same'
-      ' time as the master.',
+      ' time as the main.',
       action='store_true')
   # Timeout in seconds for the operation, default 2700 seconds (45 minutes)
   parser.add_argument(
@@ -179,7 +179,7 @@ class Upgrade(base.Command):
         name=args.name,
         server_conf=server_conf,
         cluster=cluster,
-        master=args.master,
+        main=args.main,
         node_pool_name=args.node_pool,
         new_version=args.cluster_version,
         concurrent_node_count=concurrent_node_count)
@@ -208,12 +208,12 @@ Upgrade.detailed_help = {
         """\
       Upgrades the Kubernetes version of an existing container cluster.
 
-      This command upgrades the Kubernetes version of the *nodes* or *master* of
-      a cluster. Note that the Kubernetes version of the cluster's *master* is
+      This command upgrades the Kubernetes version of the *nodes* or *main* of
+      a cluster. Note that the Kubernetes version of the cluster's *main* is
       also periodically upgraded automatically as new releases are available.
 
       If desired cluster version is omitted, *node* upgrades default to the
-      current *master* version and *master* upgrades default to the default
+      current *main* version and *main* upgrades default to the default
       cluster version, which can be found in the server config.
 
       *By running this command, all of the cluster's nodes will be deleted and*
@@ -231,7 +231,7 @@ Upgrade.detailed_help = {
     'EXAMPLES':
         """\
       Upgrade the nodes of <cluster> to the Kubernetes version of the cluster's
-      master.
+      main.
 
         $ {command} <cluster>
 
@@ -239,9 +239,9 @@ Upgrade.detailed_help = {
 
         $ {command} <cluster> --cluster-version "x.y.z"
 
-      Upgrade the master of <cluster> to the default cluster version:
+      Upgrade the main of <cluster> to the default cluster version:
 
-        $ {command} <cluster> --master"
+        $ {command} <cluster> --main"
 """,
 }
 

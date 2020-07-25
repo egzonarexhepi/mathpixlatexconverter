@@ -45,8 +45,8 @@ def _NodePoolFromCluster(cluster, node_pool_name):
       node_pool_name))
 
 
-def _MasterUpgradeMessage(name, server_conf, cluster, new_version):
-  """Returns the prompt message during a master upgrade.
+def _MainUpgradeMessage(name, server_conf, cluster, new_version):
+  """Returns the prompt message during a main upgrade.
 
   Args:
     name: str, the name of the cluster being upgraded.
@@ -62,7 +62,7 @@ def _MasterUpgradeMessage(name, server_conf, cluster, new_version):
         to which version.
   """
   if cluster:
-    version_message = 'version [{}]'.format(cluster.currentMasterVersion)
+    version_message = 'version [{}]'.format(cluster.currentMainVersion)
   else:
     version_message = 'its current version'
 
@@ -74,7 +74,7 @@ def _MasterUpgradeMessage(name, server_conf, cluster, new_version):
   else:
     new_version_message = 'the default cluster version'
 
-  return ('Master of cluster [{}] will be upgraded from {} to {}.'
+  return ('Main of cluster [{}] will be upgraded from {} to {}.'
           .format(name, version_message, new_version_message))
 
 
@@ -116,12 +116,12 @@ def _NodeUpgradeMessage(name, cluster, node_pool_name, new_version,
     version_message = 'its current version'
 
   if not new_version and cluster:
-    new_version = cluster.currentMasterVersion
+    new_version = cluster.currentMainVersion
 
   if new_version:
     new_version_message = 'version [{}]'.format(new_version)
   else:
-    new_version_message = 'the master version'
+    new_version_message = 'the main version'
 
   concurrent_message = ''
   if concurrent_node_count:
@@ -134,7 +134,7 @@ def _NodeUpgradeMessage(name, cluster, node_pool_name, new_version,
                   new_version_message, concurrent_message))
 
 
-def ClusterUpgradeMessage(name, server_conf=None, cluster=None, master=False,
+def ClusterUpgradeMessage(name, server_conf=None, cluster=None, main=False,
                           node_pool_name=None, new_version=None,
                           concurrent_node_count=None):
   """Get a message to print during gcloud container clusters upgrade.
@@ -143,7 +143,7 @@ def ClusterUpgradeMessage(name, server_conf=None, cluster=None, master=False,
     name: str, the name of the cluster being upgraded.
     server_conf: the server config object.
     cluster: the cluster object.
-    master: bool, if the upgrade applies to the master version.
+    main: bool, if the upgrade applies to the main version.
     node_pool_name: str, the name of the node pool if the upgrade is for a
         specific node pool.
     new_version: str, the name of the new version, if given.
@@ -156,8 +156,8 @@ def ClusterUpgradeMessage(name, server_conf=None, cluster=None, master=False,
     str, a message about which nodes in the cluster will be upgraded and
         to which version.
   """
-  if master:
-    upgrade_message = _MasterUpgradeMessage(name, server_conf, cluster,
+  if main:
+    upgrade_message = _MainUpgradeMessage(name, server_conf, cluster,
                                             new_version)
   else:
     upgrade_message = _NodeUpgradeMessage(name, cluster, node_pool_name,
@@ -280,5 +280,5 @@ def ParseUpdateOptionsBase(args, locations):
       max_nodes=args.max_nodes,
       node_pool=args.node_pool,
       locations=locations,
-      enable_master_authorized_networks=args.enable_master_authorized_networks,
-      master_authorized_networks=args.master_authorized_networks)
+      enable_main_authorized_networks=args.enable_main_authorized_networks,
+      main_authorized_networks=args.main_authorized_networks)

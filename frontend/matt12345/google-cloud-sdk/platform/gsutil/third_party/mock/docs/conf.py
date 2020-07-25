@@ -62,8 +62,8 @@ html_theme_options = {}
 # The suffix of source filenames.
 source_suffix = '.txt'
 
-# The master toctree document.
-master_doc = 'index'
+# The main toctree document.
+main_doc = 'index'
 
 # General substitutions.
 project = u'Mock'

@@ -48,7 +48,7 @@ class List(base.ListCommand):
             name.basename():label=ACCOUNT_ID,
             displayName:label=NAME,
             open,
-            masterBillingAccount.basename():label=MASTER_ACCOUNT_ID
+            mainBillingAccount.basename():label=MASTER_ACCOUNT_ID
           )
     """)
     parser.display_info.AddUriFunc(List.ToSelfLink)

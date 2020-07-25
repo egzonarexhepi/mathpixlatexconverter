@@ -319,20 +319,20 @@ def AddEnableBinLog(parser, show_negated_in_help=False):
       **kwargs)
 
 
-def AddExternalMasterGroup(parser):
-  """Add flags to the parser for creating an external master and replica."""
+def AddExternalMainGroup(parser):
+  """Add flags to the parser for creating an external main and replica."""
 
   # Group for creating external primary instances.
-  external_master_group = parser.add_group(
+  external_main_group = parser.add_group(
       required=False,
       help='Options for creating a wrapper for an external data source.')
-  external_master_group.add_argument(
+  external_main_group.add_argument(
       '--source-ip-address',
       required=True,
       type=compute_utils.IPV4Argument,
       help=('Public IP address used to connect to and replicate from '
             'the external data source.'))
-  external_master_group.add_argument(
+  external_main_group.add_argument(
       '--source-port',
       type=arg_parsers.BoundedInt(lower_bound=1, upper_bound=65535),
       # Default MySQL port number.
@@ -346,25 +346,25 @@ def AddExternalMasterGroup(parser):
       help=('Options for creating an internal replica of an external data '
             'source.'))
   internal_replica_group.add_argument(
-      '--master-username',
+      '--main-username',
       required=True,
       help='Name of the replication user on the external data source.')
 
   # TODO(b/78648703): Make group required when mutex required status is fixed.
   # For entering the password of the replication user of an external primary.
-  master_password_group = internal_replica_group.add_group(
+  main_password_group = internal_replica_group.add_group(
       'Password group.', mutex=True)
-  master_password_group.add_argument(
-      '--master-password',
+  main_password_group.add_argument(
+      '--main-password',
       help='Password of the replication user on the external data source.')
-  master_password_group.add_argument(
-      '--prompt-for-master-password',
+  main_password_group.add_argument(
+      '--prompt-for-main-password',
       action='store_true',
       help=('Prompt for the password of the replication user on the '
             'external data source. The password is all typed characters up '
             'to but not including the RETURN or ENTER key.'))
   internal_replica_group.add_argument(
-      '--master-dump-file-path',
+      '--main-dump-file-path',
       required=True,
       type=storage_util.ObjectReference.FromArgument,
       help=('Path to the MySQL dump file in Google Cloud Storage from '
@@ -376,7 +376,7 @@ def AddExternalMasterGroup(parser):
   credential_group = internal_replica_group.add_group(
       'Client and server credentials.', required=False)
   credential_group.add_argument(
-      '--master-ca-certificate-path',
+      '--main-ca-certificate-path',
       required=True,
       help=('Path to a file containing the X.509v3 (RFC5280) PEM encoded '
             'certificate of the CA that signed the external data source\'s '

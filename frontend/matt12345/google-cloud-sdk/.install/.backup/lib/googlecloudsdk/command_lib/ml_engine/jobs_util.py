@@ -90,8 +90,8 @@ CUSTOM tier is not a set tier, but rather enables you to use your own
 cluster specification. When you use this tier, set values to configure your
 processing cluster according to these guidelines (using the `--config` flag):
 
-* You _must_ set `TrainingInput.masterType` to specify the type of machine to
-  use for your master node. This is the only required setting.
+* You _must_ set `TrainingInput.mainType` to specify the type of machine to
+  use for your main node. This is the only required setting.
 * You _may_ set `TrainingInput.workerCount` to specify the number of workers to
   use. If you specify one or more workers, you _must_ also set
   `TrainingInput.workerType` to specify the type of machine to use for your
@@ -101,8 +101,8 @@ processing cluster according to these guidelines (using the `--config` flag):
   _must_ also set `TrainingInput.parameterServerType` to specify the type of
   machine to use for your parameter servers.  Note that all of your workers must
   use the same machine type, which can be different from your parameter server
-  type and master type. Your parameter servers must likewise use the same
-  machine type, which can be different from your worker type and master type.\
+  type and main type. Your parameter servers must likewise use the same
+  machine type, which can be different from your worker type and main type.\
 """)
 }
 
@@ -122,10 +122,10 @@ class TrainingCustomInputServerConfig(object):
   def __init__(self,
                runtime_version,
                scale_tier,
-               master_machine_type=None,
-               master_image_uri=None,
-               master_accelerator_type=None,
-               master_accelerator_count=None,
+               main_machine_type=None,
+               main_image_uri=None,
+               main_accelerator_type=None,
+               main_accelerator_count=None,
                parameter_machine_type=None,
                parameter_machine_count=None,
                parameter_image_uri=None,
@@ -137,10 +137,10 @@ class TrainingCustomInputServerConfig(object):
                worker_image_uri=None,
                work_accelerator_type=None,
                work_accelerator_count=None):
-    self.master_image_uri = master_image_uri
-    self.master_machine_type = master_machine_type
-    self.master_accelerator_type = master_accelerator_type
-    self.master_accelerator_count = master_accelerator_count
+    self.main_image_uri = main_image_uri
+    self.main_machine_type = main_machine_type
+    self.main_accelerator_type = main_accelerator_type
+    self.main_accelerator_count = main_accelerator_count
     self.parameter_machine_type = parameter_machine_type
     self.parameter_machine_count = parameter_machine_count
     self.parameter_image_uri = parameter_image_uri
@@ -157,24 +157,24 @@ class TrainingCustomInputServerConfig(object):
 
   def ValidateConfig(self):
     """Validate that custom config parameters are set correctly."""
-    if self.master_image_uri and self.runtime_version:
-      raise flags.ArgumentError('Only one of --master-image-uri,'
+    if self.main_image_uri and self.runtime_version:
+      raise flags.ArgumentError('Only one of --main-image-uri,'
                                 ' --runtime-version can be set.')
     if self.scale_tier and self.scale_tier.name == 'CUSTOM':
-      if not self.master_machine_type:
-        raise flags.ArgumentError('--master-machine-type is required if '
+      if not self.main_machine_type:
+        raise flags.ArgumentError('--main-machine-type is required if '
                                   'scale-tier is set to `CUSTOM`.')
     return True
 
   def GetFieldMap(self):
     """Return a mapping of object fields to apitools message fields."""
     return {
-        'masterConfig': {'imageUri': self.master_image_uri,
+        'mainConfig': {'imageUri': self.main_image_uri,
                          'acceleratorConfig':
-                             {'count': self.master_accelerator_count,
-                              'type': self.master_accelerator_type}
+                             {'count': self.main_accelerator_count,
+                              'type': self.main_accelerator_type}
                         },
-        'masterType': self.master_machine_type,
+        'mainType': self.main_machine_type,
         'parameterServerConfig': {
             'imageUri': self.parameter_image_uri,
             'acceleratorConfig':
@@ -208,13 +208,13 @@ class TrainingCustomInputServerConfig(object):
     return cls(
         scale_tier=parsed_tier,
         runtime_version=args.runtime_version,
-        master_machine_type=args.master_machine_type,
+        main_machine_type=args.main_machine_type,
 
-        master_image_uri=args.master_image_uri,
-        master_accelerator_type=(args.master_accelerator.get('type')
-                                 if args.master_accelerator else None),
-        master_accelerator_count=(args.master_accelerator.get('count')
-                                  if args.master_accelerator else None),
+        main_image_uri=args.main_image_uri,
+        main_accelerator_type=(args.main_accelerator.get('type')
+                                 if args.main_accelerator else None),
+        main_accelerator_count=(args.main_accelerator.get('count')
+                                  if args.main_accelerator else None),
         parameter_machine_type=args.parameter_server_machine_type,
         parameter_machine_count=args.parameter_server_count,
         parameter_image_uri=args.parameter_server_image_uri,

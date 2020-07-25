@@ -130,7 +130,7 @@ class V1APIVersions(object):
         possible. Clients can use the appropriate server address as per the CIDR
         that they match. In case of multiple matches, clients should use the
         longest matching CIDR. The server returns only those CIDRs that it
-        thinks that the client can match. For example: the master will return an
+        thinks that the client can match. For example: the main will return an
         internal IP CIDR only, if the client reaches the server using an
         internal IP. Server looks at X-Forwarded-For header or X-Real-Ip header
         or request.RemoteAddr (in that order) to get the client IP.
@@ -149,7 +149,7 @@ class V1APIVersions(object):
         possible. Clients can use the appropriate server address as per the CIDR
         that they match. In case of multiple matches, clients should use the
         longest matching CIDR. The server returns only those CIDRs that it
-        thinks that the client can match. For example: the master will return an
+        thinks that the client can match. For example: the main will return an
         internal IP CIDR only, if the client reaches the server using an
         internal IP. Server looks at X-Forwarded-For header or X-Real-Ip header
         or request.RemoteAddr (in that order) to get the client IP.

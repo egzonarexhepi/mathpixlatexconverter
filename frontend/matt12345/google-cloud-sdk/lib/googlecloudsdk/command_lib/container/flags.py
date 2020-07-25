@@ -170,7 +170,7 @@ def AddClusterVersionFlag(parser, suppressed=False, help=None):  # pylint: disab
   """Adds a --cluster-version flag to the given parser."""
   if help is None:
     help = """\
-The Kubernetes version to use for the master and nodes. Defaults to
+The Kubernetes version to use for the main and nodes. Defaults to
 server-specified.
 
 The default Kubernetes version is available using the following command.
@@ -187,7 +187,7 @@ def AddReleaseChannelFlag(parser):
 Release channel a cluster is subscribed to.
 
 When a cluster is subscribed to a release channel, Google maintains both the
-master version and the node version. Node auto-upgrade defaults to true and
+main version and the node version. Node auto-upgrade defaults to true and
 cannot be disabled. Updates to version related fields (e.g. --cluster-version)
 return an error.
 """
@@ -413,7 +413,7 @@ https://cloud.google.com/sdk/gcloud/reference/container/clusters/create#--scopes
 Autoprovisioning locations is a set of zones where new node pools can be created by
 Autoprovisioning. Autoprovisioning locations are specified in the field
 'autoprovisioningLocations'. All zones must be in the same region as the cluster's
-master(s).
+main(s).
 """)
 
   from_flags_group = limits_group.add_argument_group(
@@ -525,7 +525,7 @@ https://cloud.google.com/sdk/gcloud/reference/container/clusters/create#--scopes
       hidden=hidden,
       help="""\
 Set of zones where new node pools can be created by autoprovisioning.
-All zones must be in the same region as the cluster's master(s).
+All zones must be in the same region as the cluster's main(s).
 Multiple locations can be specified, separated by commas.""",
       metavar='ZONE',
       type=arg_parsers.ArgList(min_length=1))
@@ -819,51 +819,51 @@ def AddTagsFlag(parser, help_text):
       help=help_text)
 
 
-def AddMasterAuthorizedNetworksFlags(parser, enable_group_for_update=None):
-  """Adds Master Authorized Networks related flags to parser.
+def AddMainAuthorizedNetworksFlags(parser, enable_group_for_update=None):
+  """Adds Main Authorized Networks related flags to parser.
 
-  Master Authorized Networks related flags are:
-  --enable-master-authorized-networks --master-authorized-networks.
+  Main Authorized Networks related flags are:
+  --enable-main-authorized-networks --main-authorized-networks.
 
   Args:
     parser: A given parser.
     enable_group_for_update: An optional group of mutually exclusive flag
-      options to which an --enable-master-authorized-networks flag is added in
+      options to which an --enable-main-authorized-networks flag is added in
       an update command.
   """
   if enable_group_for_update is None:
     # Flags are being added to the same group.
-    master_flag_group = parser.add_argument_group('Master Authorized Networks')
-    enable_flag_group = master_flag_group
+    main_flag_group = parser.add_argument_group('Main Authorized Networks')
+    enable_flag_group = main_flag_group
   else:
     # Flags are being added to different groups, so the new one should have no
     # help text (has only one arg).
-    master_flag_group = parser.add_argument_group('')
+    main_flag_group = parser.add_argument_group('')
     enable_flag_group = enable_group_for_update
 
   enable_flag_group.add_argument(
-      '--enable-master-authorized-networks',
+      '--enable-main-authorized-networks',
       default=None,
       help="""\
 Allow only specified set of CIDR blocks (specified by the
-`--master-authorized-networks` flag) to connect to Kubernetes master through
+`--main-authorized-networks` flag) to connect to Kubernetes main through
 HTTPS. Besides these blocks, the following have access as well:\n
   1) The private network the cluster connects to if
   `--enable-private-nodes` is specified.
   2) Google Compute Engine Public IPs if `--enable-private-nodes` is not
   specified.\n
-Use `--no-enable-master-authorized-networks` to disable. When disabled, public
-internet (0.0.0.0/0) is allowed to connect to Kubernetes master through HTTPS.
+Use `--no-enable-main-authorized-networks` to disable. When disabled, public
+internet (0.0.0.0/0) is allowed to connect to Kubernetes main through HTTPS.
 """,
       action='store_true')
-  master_flag_group.add_argument(
-      '--master-authorized-networks',
+  main_flag_group.add_argument(
+      '--main-authorized-networks',
       type=arg_parsers.ArgList(min_length=1),
       metavar='NETWORK',
       help='The list of CIDR blocks (up to {max}) that are allowed to connect '
-      'to Kubernetes master through HTTPS. Specified in CIDR notation (e.g. '
+      'to Kubernetes main through HTTPS. Specified in CIDR notation (e.g. '
       '1.2.3.4/30). Can not be specified unless '
-      '`--enable-master-authorized-networks` is also specified.'.format(
+      '`--enable-main-authorized-networks` is also specified.'.format(
           max=api_adapter.MAX_AUTHORIZED_NETWORKS_CIDRS))
 
 
@@ -876,7 +876,7 @@ def AddNetworkPolicyFlags(parser, hidden=False):
       hidden=hidden,
       help='Enable network policy enforcement for this cluster. If you are '
       'enabling network policy on an existing cluster the network policy '
-      'addon must first be enabled on the master by using '
+      'addon must first be enabled on the main by using '
       '--update-addons=NetworkPolicy=ENABLED flag.')
 
 
@@ -902,15 +902,15 @@ def AddPrivateClusterFlags(parser, with_deprecated=False, with_alpha=False):
       action='store_true')
   group.add_argument(
       '--enable-private-endpoint',
-      help=('Cluster is managed using the private IP address of the master '
+      help=('Cluster is managed using the private IP address of the main '
             'API endpoint.'),
       default=None,
       action='store_true')
   if with_alpha:
     AddPeeringRouteSharingFlag(group)
   group.add_argument(
-      '--master-ipv4-cidr',
-      help=('IPv4 CIDR range to use for the master network.  This should have '
+      '--main-ipv4-cidr',
+      help=('IPv4 CIDR range to use for the main network.  This should have '
             'a netmask of size /28 and should be used in conjunction with the '
             '--enable-private-nodes flag.'),
       default=None)
@@ -920,7 +920,7 @@ def AddPeeringRouteSharingFlag(group):
   group.add_argument(
       '--enable-peering-route-sharing',
       help=(
-          'Enable custom route sharing between the master and node VPCs, which '
+          'Enable custom route sharing between the main and node VPCs, which '
           'ensures clients running in networks connected via a Cloud Router, '
           'VPN, or Interconnect can reach the API server.'),
       default=None,
@@ -1555,7 +1555,7 @@ def AddNodeLocationsFlag(parser):
       metavar='ZONE',
       help="""\
 The set of zones in which the specified node footprint should be replicated.
-All zones must be in the same region as the cluster's master(s), specified by
+All zones must be in the same region as the cluster's main(s), specified by
 the `--zone` or `--region` flag. Additionally, for zonal clusters,
 `--node-locations` must contain the cluster's primary zone. If not specified,
 all nodes will be in the cluster's primary zone (for zonal clusters) or spread
@@ -1800,7 +1800,7 @@ def AddIssueClientCertificateFlag(parser):
 Issue a TLS client certificate with admin permissions.
 
 When enabled, the certificate and private key pair will be present in
-MasterAuth field of the Cluster object. For cluster versions before 1.12, a
+MainAuth field of the Cluster object. For cluster versions before 1.12, a
 client certificate will be issued by default. As of 1.12, client certificates
 are disabled by default.
 """
@@ -2170,7 +2170,7 @@ visible to the networking fabric. With this feature, you can use VPC flow
 logging or other VPC features for intra-node traffic.
 
 Enabling it on an existing cluster causes the cluster
-master and the cluster nodes to restart, which might cause a disruption.
+main and the cluster nodes to restart, which might cause a disruption.
 """)
 
 

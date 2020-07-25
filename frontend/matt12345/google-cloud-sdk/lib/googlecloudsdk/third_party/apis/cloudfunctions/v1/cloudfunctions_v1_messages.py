@@ -1111,7 +1111,7 @@ class SourceRepository(_messages.Message):
       opers.google.com/projects/*/repos/*/revisions/*/paths/*` To refer to a
       moveable alias (branch):
       `https://source.developers.google.com/projects/*/repos/*/moveable-
-      aliases/*/paths/*` In particular, to refer to HEAD use `master` moveable
+      aliases/*/paths/*` In particular, to refer to HEAD use `main` moveable
       alias. To refer to a specific fixed alias (tag):
       `https://source.developers.google.com/projects/*/repos/*/fixed-
       aliases/*/paths/*`  You may omit `paths/*` if you want to use the main

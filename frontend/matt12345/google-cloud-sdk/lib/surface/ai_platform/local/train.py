@@ -102,7 +102,7 @@ class RunLocal(base.Command):
       retval = local_train.MakeProcess(args.module_name,
                                        package_root,
                                        args=user_args,
-                                       task_type='master')
+                                       task_type='main')
     # Don't raise an exception because the users will already see the message.
     # We want this to mimic calling the script directly as much as possible.
     self.exit_code = retval

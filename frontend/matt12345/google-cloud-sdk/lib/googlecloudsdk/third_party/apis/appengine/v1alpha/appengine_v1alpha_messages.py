@@ -329,7 +329,7 @@ class AuthorizedCertificate(_messages.Message):
 
 class AuthorizedDomain(_messages.Message):
   r"""A domain that a user has been authorized to administer. To authorize use
-  of a domain, verify ownership via Webmaster Central
+  of a domain, verify ownership via Webmain Central
   (https://www.google.com/webmasters/verification/home).
 
   Fields:

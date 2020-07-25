@@ -483,7 +483,7 @@ if __name__ == '__main__':  # pragma: no cover
         content = fp.read()
         # replace crnl to nl for Windows.
         #
-        # Note that, originally, contributers should keep nl of master
+        # Note that, originally, contributers should keep nl of main
         # repository, for example by using some kind of automatic
         # management EOL, like `EolExtension
         #  <https://www.mercurial-scm.org/wiki/EolExtension>`.

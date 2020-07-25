@@ -175,7 +175,7 @@ def TemporaryKubeconfig(location_id, cluster_id):
       gke_api = gke_api_adapter.NewAPIAdapter(GKE_API_VERSION)
       cluster_ref = gke_api.ParseCluster(cluster_id, location_id)
       cluster = gke_api.GetCluster(cluster_ref)
-      auth = cluster.masterAuth
+      auth = cluster.mainAuth
       missing_creds = not (auth and auth.clientCertificate and auth.clientKey)
       if missing_creds and not gke_util.ClusterConfig.UseGCPAuthProvider():
         raise Error('Unable to get cluster credentials. User must have edit '

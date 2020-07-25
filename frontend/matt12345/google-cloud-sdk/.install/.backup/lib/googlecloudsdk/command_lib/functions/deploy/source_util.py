@@ -156,7 +156,7 @@ def _AddDefaultBranch(source_archive_url):
                         r'/projects/[^/]+'
                         r'/repos/[^/]+$')
   if re.match(cloud_repo_pattern, source_archive_url):
-    return source_archive_url + '/moveable-aliases/master'
+    return source_archive_url + '/moveable-aliases/main'
   return source_archive_url
 
 

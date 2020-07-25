@@ -380,7 +380,7 @@ class TrainingJobRequest(object):
                scale_tier=None,
                hyperparameters=None,
                region=None,
-               master_type=None,
+               main_type=None,
                worker_type=None,
                ps_type=None,
                worker_count=None,
@@ -405,7 +405,7 @@ class TrainingJobRequest(object):
       scale_tier: Google Cloud ML tier to run in.
       hyperparameters: (Optional) Hyperparameter config to use for the job.
       region: (Optional) Google Cloud region in which to run.
-      master_type: Master type to use with a CUSTOM scale tier.
+      main_type: Main type to use with a CUSTOM scale tier.
       worker_type: Worker type to use with a CUSTOM scale tier.
       ps_type: Parameter Server type to use with a CUSTOM scale tier.
       worker_count: Worker count to use with a CUSTOM scale tier.
@@ -422,7 +422,7 @@ class TrainingJobRequest(object):
     self.scale_tier = scale_tier
     self.hyperparameters = hyperparameters
     self.region = region
-    self.master_type = master_type
+    self.main_type = main_type
     self.worker_type = worker_type
     self.ps_type = ps_type
     self.worker_count = worker_count
@@ -446,7 +446,7 @@ class TrainingJobRequest(object):
   def __eq__(self, o):
     for f in ['parent', 'job_name', 'job_args', 'package_uris', 'python_module',
               'timeout', 'polling_interval', 'endpoint', 'hyperparameters',
-              'scale_tier', 'worker_type', 'ps_type', 'master_type', 'region',
+              'scale_tier', 'worker_type', 'ps_type', 'main_type', 'region',
               'ps_count', 'worker_count', 'runtime_version']:
       if getattr(self, f) != getattr(o, f):
         return False

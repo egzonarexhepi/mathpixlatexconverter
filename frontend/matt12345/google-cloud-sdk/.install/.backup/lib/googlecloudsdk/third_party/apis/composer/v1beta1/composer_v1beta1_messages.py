@@ -697,16 +697,16 @@ class PrivateClusterConfig(_messages.Message):
   Fields:
     enablePrivateEndpoint: Optional. If `true`, access to the public endpoint
       of the GKE cluster is denied.
-    masterIpv4CidrBlock: The IP range in CIDR notation to use for the hosted
-      master network. This range is used for assigning internal IP addresses
-      to the cluster master or set of masters and to the internal load
+    mainIpv4CidrBlock: The IP range in CIDR notation to use for the hosted
+      main network. This range is used for assigning internal IP addresses
+      to the cluster main or set of mains and to the internal load
       balancer virtual IP. This range must not overlap with any other ranges
       in use within the cluster's network. If left blank, the default value of
       '172.16.0.0/28' is used.
   """
 
   enablePrivateEndpoint = _messages.BooleanField(1)
-  masterIpv4CidrBlock = _messages.StringField(2)
+  mainIpv4CidrBlock = _messages.StringField(2)
 
 
 class PrivateEnvironmentConfig(_messages.Message):

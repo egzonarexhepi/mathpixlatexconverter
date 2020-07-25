@@ -110,7 +110,7 @@ BASE_DIRECTORIES = [
     ["info"]
     ]
 
-DEFAULT_REF = b'refs/heads/master'
+DEFAULT_REF = b'refs/heads/main'
 
 
 class InvalidUserIdentity(Exception):

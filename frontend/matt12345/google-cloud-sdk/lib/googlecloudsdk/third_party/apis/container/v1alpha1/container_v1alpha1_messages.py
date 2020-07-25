@@ -58,7 +58,7 @@ class AddonsConfig(_messages.Message):
       workloads and applications. For more information, see:
       https://cloud.google.com/kubernetes-engine/docs/concepts/dashboards
     networkPolicyConfig: Configuration for NetworkPolicy. This only tracks
-      whether the addon is enabled or not on the Master, it does not track
+      whether the addon is enabled or not on the Main, it does not track
       whether network policy is enabled for the nodes.
   """
 
@@ -240,7 +240,7 @@ class Cluster(_messages.Message):
       feature.
     createTime: [Output only] The time the cluster was created, in
       [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
-    currentMasterVersion: The current software version of the master endpoint.
+    currentMainVersion: The current software version of the main endpoint.
     currentNodeCount: [Output only]  The number of nodes currently in the
       cluster. Deprecated. Call Kubernetes API directly to retrieve node
       information.
@@ -261,21 +261,21 @@ class Cluster(_messages.Message):
     description: An optional description of this cluster.
     enableKubernetesAlpha: Kubernetes alpha features are enabled on this
       cluster. This includes alpha API groups (e.g. v1alpha1) and features
-      that may not be production ready in the kubernetes version of the master
-      and nodes. The cluster has no SLA for uptime and master/node upgrades
+      that may not be production ready in the kubernetes version of the main
+      and nodes. The cluster has no SLA for uptime and main/node upgrades
       are disabled. Alpha enabled clusters are automatically deleted thirty
       days after creation.
     enableTpu: Enable the ability to use Cloud TPUs in this cluster.
-    endpoint: [Output only] The IP address of this cluster's master endpoint.
+    endpoint: [Output only] The IP address of this cluster's main endpoint.
       The endpoint can be accessed from the internet at
-      `https://username:password@endpoint/`.  See the `masterAuth` property of
+      `https://username:password@endpoint/`.  See the `mainAuth` property of
       this resource for username and password information.
     expireTime: [Output only] The time the cluster will be automatically
       deleted in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
     initialClusterVersion: The initial Kubernetes version for this cluster.
-      Valid versions are those found in validMasterVersions returned by
+      Valid versions are those found in validMainVersions returned by
       getServerConfig.  The version can be upgraded over time; such upgrades
-      are reflected in currentMasterVersion and currentNodeVersion.  Users may
+      are reflected in currentMainVersion and currentNodeVersion.  Users may
       specify either explicit versions offered by Kubernetes Engine or version
       aliases, which have the following behavior:  - "latest": picks the
       highest valid Kubernetes version - "1.X": picks the highest valid
@@ -311,17 +311,17 @@ class Cluster(_messages.Message):
     managedPodIdentityConfig: Configuration for the use of GCP IAM Service
       Accounts in applications in this cluster.  Deprecated, use
       WorkloadIdentityConfig instead.
-    masterAuth: The authentication information for accessing the master
+    mainAuth: The authentication information for accessing the main
       endpoint. If unspecified, the defaults are used: For clusters before
-      v1.12, if master_auth is unspecified, `username` will be set to "admin",
+      v1.12, if main_auth is unspecified, `username` will be set to "admin",
       a random password will be generated, and a client certificate will be
       issued.
-    masterAuthorizedNetworksConfig: The configuration options for master
+    mainAuthorizedNetworksConfig: The configuration options for main
       authorized networks feature.
-    masterIpv4CidrBlock: The IP prefix in CIDR notation to use for the hosted
-      master network. This prefix will be used for assigning private IP
-      addresses to the master or set of masters, as well as the ILB VIP. This
-      field is deprecated, use private_cluster_config.master_ipv4_cidr_block
+    mainIpv4CidrBlock: The IP prefix in CIDR notation to use for the hosted
+      main network. This prefix will be used for assigning private IP
+      addresses to the main or set of mains, as well as the ILB VIP. This
+      field is deprecated, use private_cluster_config.main_ipv4_cidr_block
       instead.
     monitoringService: The monitoring service the cluster should use to write
       metrics. Currently available options:  * `monitoring.googleapis.com` -
@@ -356,7 +356,7 @@ class Cluster(_messages.Message):
     podSecurityPolicyConfig: Configuration for the PodSecurityPolicy feature.
     privateCluster: If this is a private cluster setup. Private clusters are
       clusters that, by default have no external IP addresses on the nodes and
-      where nodes and the master communicate over private IP addresses. This
+      where nodes and the main communicate over private IP addresses. This
       field is deprecated, use private_cluster_config.enable_private_nodes
       instead.
     privateClusterConfig: Configuration for private cluster.
@@ -418,7 +418,7 @@ class Cluster(_messages.Message):
       RUNNING: The RUNNING state indicates the cluster has been created and is
         fully usable.
       RECONCILING: The RECONCILING state indicates that some work is actively
-        being done on the cluster, such as upgrading the master or node
+        being done on the cluster, such as upgrading the main or node
         software. Details can be found in the `statusMessage` field.
       STOPPING: The STOPPING state indicates the cluster is being deleted.
       ERROR: The ERROR state indicates the cluster may be unusable. Details
@@ -469,7 +469,7 @@ class Cluster(_messages.Message):
   conditions = _messages.MessageField('StatusCondition', 6, repeated=True)
   costManagementConfig = _messages.MessageField('CostManagementConfig', 7)
   createTime = _messages.StringField(8)
-  currentMasterVersion = _messages.StringField(9)
+  currentMainVersion = _messages.StringField(9)
   currentNodeCount = _messages.IntegerField(10, variant=_messages.Variant.INT32)
   currentNodeVersion = _messages.StringField(11)
   databaseEncryption = _messages.MessageField('DatabaseEncryption', 12)
@@ -491,9 +491,9 @@ class Cluster(_messages.Message):
   loggingService = _messages.StringField(28)
   maintenancePolicy = _messages.MessageField('MaintenancePolicy', 29)
   managedPodIdentityConfig = _messages.MessageField('ManagedPodIdentityConfig', 30)
-  masterAuth = _messages.MessageField('MasterAuth', 31)
-  masterAuthorizedNetworksConfig = _messages.MessageField('MasterAuthorizedNetworksConfig', 32)
-  masterIpv4CidrBlock = _messages.StringField(33)
+  mainAuth = _messages.MessageField('MainAuth', 31)
+  mainAuthorizedNetworksConfig = _messages.MessageField('MainAuthorizedNetworksConfig', 32)
+  mainIpv4CidrBlock = _messages.StringField(33)
   monitoringService = _messages.StringField(34)
   name = _messages.StringField(35)
   network = _messages.StringField(36)
@@ -605,9 +605,9 @@ class ClusterUpdate(_messages.Message):
       with Kubernetes-native resource model in Stackdriver *
       "logging.googleapis.com" - the Google Cloud Logging service * "none" -
       no logs will be exported from the cluster
-    desiredMasterAuthorizedNetworksConfig: The desired configuration options
-      for master authorized networks feature.
-    desiredMasterVersion: The Kubernetes version to change the master to.
+    desiredMainAuthorizedNetworksConfig: The desired configuration options
+      for main authorized networks feature.
+    desiredMainVersion: The Kubernetes version to change the main to.
       Users may specify either explicit versions offered by Kubernetes Engine
       or version aliases, which have the following behavior:  - "latest":
       picks the highest valid Kubernetes version - "1.X": picks the highest
@@ -635,7 +635,7 @@ class ClusterUpdate(_messages.Message):
       version - "1.X": picks the highest valid patch+gke.N patch in the 1.X
       version - "1.X.Y": picks the highest valid gke.N patch in the 1.X.Y
       version - "1.X.Y-gke.N": picks an explicit Kubernetes version - "-":
-      picks the Kubernetes master version
+      picks the Kubernetes main version
     desiredPodSecurityPolicyConfig: The desired configuration options for the
       PodSecurityPolicy feature.
     desiredPrivateClusterConfig: The desired private cluster configuration.
@@ -664,8 +664,8 @@ class ClusterUpdate(_messages.Message):
   desiredIntraNodeVisibilityConfig = _messages.MessageField('IntraNodeVisibilityConfig', 12)
   desiredLocations = _messages.StringField(13, repeated=True)
   desiredLoggingService = _messages.StringField(14)
-  desiredMasterAuthorizedNetworksConfig = _messages.MessageField('MasterAuthorizedNetworksConfig', 15)
-  desiredMasterVersion = _messages.StringField(16)
+  desiredMainAuthorizedNetworksConfig = _messages.MessageField('MainAuthorizedNetworksConfig', 15)
+  desiredMainVersion = _messages.StringField(16)
   desiredMonitoringService = _messages.StringField(17)
   desiredNodePoolAutoscaling = _messages.MessageField('NodePoolAutoscaling', 18)
   desiredNodePoolId = _messages.StringField(19)
@@ -681,7 +681,7 @@ class ClusterUpdate(_messages.Message):
 
 
 class CompleteIPRotationRequest(_messages.Message):
-  r"""CompleteIPRotationRequest moves the cluster master back into single-IP
+  r"""CompleteIPRotationRequest moves the cluster main back into single-IP
   mode.
 
   Fields:
@@ -2137,8 +2137,8 @@ class ManagedPodIdentityConfig(_messages.Message):
   federatingServiceAccount = _messages.StringField(2)
 
 
-class MasterAuth(_messages.Message):
-  r"""The authentication information for accessing the master endpoint.
+class MainAuth(_messages.Message):
+  r"""The authentication information for accessing the main endpoint.
   Authentication can be done using HTTP basic auth or using client
   certificates.
 
@@ -2152,11 +2152,11 @@ class MasterAuth(_messages.Message):
       authenticate to the cluster endpoint.
     clusterCaCertificate: [Output only] Base64-encoded public certificate that
       is the root of trust for the cluster.
-    password: The password to use for HTTP basic authentication to the master
-      endpoint. Because the master endpoint is open to the Internet, you
+    password: The password to use for HTTP basic authentication to the main
+      endpoint. Because the main endpoint is open to the Internet, you
       should create a strong password.  If a password is provided for cluster
       creation, username must be non-empty.
-    username: The username to use for HTTP basic authentication to the master
+    username: The username to use for HTTP basic authentication to the main
       endpoint. For clusters v1.6.0 and later, basic authentication can be
       disabled by leaving username unspecified (or setting it to the empty
       string).
@@ -2170,16 +2170,16 @@ class MasterAuth(_messages.Message):
   username = _messages.StringField(6)
 
 
-class MasterAuthorizedNetworksConfig(_messages.Message):
-  r"""Configuration options for the master authorized networks feature.
-  Enabled master authorized networks will disallow all external traffic to
-  access Kubernetes master through HTTPS except traffic from the given CIDR
+class MainAuthorizedNetworksConfig(_messages.Message):
+  r"""Configuration options for the main authorized networks feature.
+  Enabled main authorized networks will disallow all external traffic to
+  access Kubernetes main through HTTPS except traffic from the given CIDR
   blocks, Google Compute Engine Public IPs and Google Prod IPs.
 
   Fields:
     cidrBlocks: cidr_blocks define up to 50 external networks that could
-      access Kubernetes master through HTTPS.
-    enabled: Whether or not master authorized networks is enabled.
+      access Kubernetes main through HTTPS.
+    enabled: Whether or not main authorized networks is enabled.
   """
 
   cidrBlocks = _messages.MessageField('CidrBlock', 1, repeated=True)
@@ -2278,7 +2278,7 @@ class NetworkPolicy(_messages.Message):
 
 class NetworkPolicyConfig(_messages.Message):
   r"""Configuration for NetworkPolicy. This only tracks whether the addon is
-  enabled or not on the Master, it does not track whether network policy is
+  enabled or not on the Main, it does not track whether network policy is
   enabled for the nodes.
 
   Fields:
@@ -2548,7 +2548,7 @@ class NodeManagement(_messages.Message):
 class NodePool(_messages.Message):
   r"""NodePool contains the name and configuration for a cluster's node pool.
   Node pools are a set of nodes (i.e. VM's), with a common configuration and
-  specification, under the control of the cluster master. They may have a set
+  specification, under the control of the cluster main. They may have a set
   of Kubernetes labels applied to them, which may be used to reference them
   during pod scheduling. They may also be resized up or down, to accommodate
   the workload.
@@ -2728,7 +2728,7 @@ class Operation(_messages.Message):
       TYPE_UNSPECIFIED: Not set.
       CREATE_CLUSTER: Cluster create.
       DELETE_CLUSTER: Cluster delete.
-      UPGRADE_MASTER: A master upgrade.
+      UPGRADE_MASTER: A main upgrade.
       UPGRADE_NODES: A node upgrade.
       REPAIR_CLUSTER: Cluster repair.
       UPDATE_CLUSTER: Cluster update.
@@ -2738,7 +2738,7 @@ class Operation(_messages.Message):
       AUTO_REPAIR_NODES: Automatic node pool repair.
       AUTO_UPGRADE_NODES: Automatic node upgrade.
       SET_LABELS: Set labels.
-      SET_MASTER_AUTH: Set/generate master auth materials
+      SET_MASTER_AUTH: Set/generate main auth materials
       SET_NODE_POOL_SIZE: Set node pool size.
       SET_NETWORK_POLICY: Updates network policy for a cluster.
       SET_MAINTENANCE_POLICY: Set the maintenance policy.
@@ -2864,14 +2864,14 @@ class PrivateClusterConfig(_messages.Message):
   Fields:
     enablePeeringRouteSharing: Whether to enable route sharing over the
       network peering.
-    enablePrivateEndpoint: Whether the master's internal IP address is used as
+    enablePrivateEndpoint: Whether the main's internal IP address is used as
       the cluster endpoint.
     enablePrivateNodes: Whether nodes have internal IP addresses only. If
       enabled, all nodes are given only RFC 1918 private addresses and
-      communicate with the master via private networking.
-    masterIpv4CidrBlock: The IP range in CIDR notation to use for the hosted
-      master network. This range will be used for assigning internal IP
-      addresses to the master or set of masters, as well as the ILB VIP. This
+      communicate with the main via private networking.
+    mainIpv4CidrBlock: The IP range in CIDR notation to use for the hosted
+      main network. This range will be used for assigning internal IP
+      addresses to the main or set of mains, as well as the ILB VIP. This
       range must not overlap with any other ranges in use within the cluster's
       network.
     peeringName: Output only. The peering name in the customer VPC used by
@@ -2885,7 +2885,7 @@ class PrivateClusterConfig(_messages.Message):
   enablePeeringRouteSharing = _messages.BooleanField(1)
   enablePrivateEndpoint = _messages.BooleanField(2)
   enablePrivateNodes = _messages.BooleanField(3)
-  masterIpv4CidrBlock = _messages.StringField(4)
+  mainIpv4CidrBlock = _messages.StringField(4)
   peeringName = _messages.StringField(5)
   privateEndpoint = _messages.StringField(6)
   publicEndpoint = _messages.StringField(7)
@@ -2937,9 +2937,9 @@ class ReleaseChannel(_messages.Message):
   r"""ReleaseChannel indicates which release channel a cluster is subscribed
   to. Release channels are arranged in order of risk and frequency of updates.
   When a cluster is subscribed to a release channel, Google maintains both the
-  master version and the node version. Node auto-upgrade defaults to true and
+  main version and the node version. Node auto-upgrade defaults to true and
   cannot be disabled. Updates to version related fields (e.g.
-  current_master_version) return an error.
+  current_main_version) return an error.
 
   Enums:
     ChannelValueValuesEnum: channel specifies which release channel the
@@ -3170,7 +3170,7 @@ class ServerConfig(_messages.Message):
     defaultImageType: Default image type.
     premiumConfig: Premium configuration for the service.
     validImageTypes: List of valid image types.
-    validMasterVersions: List of valid master versions.
+    validMainVersions: List of valid main versions.
     validNodeVersions: List of valid node upgrade target versions.
   """
 
@@ -3179,7 +3179,7 @@ class ServerConfig(_messages.Message):
   defaultImageType = _messages.StringField(3)
   premiumConfig = _messages.MessageField('PremiumConfig', 4)
   validImageTypes = _messages.StringField(5, repeated=True)
-  validMasterVersions = _messages.StringField(6, repeated=True)
+  validMainVersions = _messages.StringField(6, repeated=True)
   validNodeVersions = _messages.StringField(7, repeated=True)
 
 
@@ -3375,15 +3375,15 @@ class SetMaintenancePolicyRequest(_messages.Message):
   zone = _messages.StringField(5)
 
 
-class SetMasterAuthRequest(_messages.Message):
-  r"""SetMasterAuthRequest updates the admin password of a cluster.
+class SetMainAuthRequest(_messages.Message):
+  r"""SetMainAuthRequest updates the admin password of a cluster.
 
   Enums:
-    ActionValueValuesEnum: The exact form of action to be taken on the master
+    ActionValueValuesEnum: The exact form of action to be taken on the main
       auth.
 
   Fields:
-    action: The exact form of action to be taken on the master auth.
+    action: The exact form of action to be taken on the main auth.
     clusterId: Deprecated. The name of the cluster to upgrade. This field has
       been deprecated and replaced by the name field.
     name: The name (project, location, cluster) of the cluster to set auth.
@@ -3398,7 +3398,7 @@ class SetMasterAuthRequest(_messages.Message):
   """
 
   class ActionValueValuesEnum(_messages.Enum):
-    r"""The exact form of action to be taken on the master auth.
+    r"""The exact form of action to be taken on the main auth.
 
     Values:
       UNKNOWN: Operation is unknown and will error out.
@@ -3418,7 +3418,7 @@ class SetMasterAuthRequest(_messages.Message):
   clusterId = _messages.StringField(2)
   name = _messages.StringField(3)
   projectId = _messages.StringField(4)
-  update = _messages.MessageField('MasterAuth', 5)
+  update = _messages.MessageField('MainAuth', 5)
   zone = _messages.StringField(6)
 
 
@@ -3830,13 +3830,13 @@ class UpdateClusterRequest(_messages.Message):
   zone = _messages.StringField(6)
 
 
-class UpdateMasterRequest(_messages.Message):
-  r"""UpdateMasterRequest updates the master of the cluster.
+class UpdateMainRequest(_messages.Message):
+  r"""UpdateMainRequest updates the main of the cluster.
 
   Fields:
     clusterId: Deprecated. The name of the cluster to upgrade. This field has
       been deprecated and replaced by the name field.
-    masterVersion: The Kubernetes version to change the master to.  Users may
+    mainVersion: The Kubernetes version to change the main to.  Users may
       specify either explicit versions offered by Kubernetes Engine or version
       aliases, which have the following behavior:  - "latest": picks the
       highest valid Kubernetes version - "1.X": picks the highest valid
@@ -3853,7 +3853,7 @@ class UpdateMasterRequest(_messages.Message):
   """
 
   clusterId = _messages.StringField(1)
-  masterVersion = _messages.StringField(2)
+  mainVersion = _messages.StringField(2)
   name = _messages.StringField(3)
   projectId = _messages.StringField(4)
   zone = _messages.StringField(5)
@@ -3886,7 +3886,7 @@ class UpdateNodePoolRequest(_messages.Message):
       - "latest": picks the highest valid Kubernetes version - "1.X": picks
       the highest valid patch+gke.N patch in the 1.X version - "1.X.Y": picks
       the highest valid gke.N patch in the 1.X.Y version - "1.X.Y-gke.N":
-      picks an explicit Kubernetes version - "-": picks the Kubernetes master
+      picks an explicit Kubernetes version - "-": picks the Kubernetes main
       version
     projectId: Deprecated. The Google Developers Console [project ID or
       project number](https://support.google.com/cloud/answer/6158840). This

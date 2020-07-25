@@ -186,7 +186,7 @@ class CapDLLexer(RegexLexer):
             (words(('asid', 'addr', 'badge', 'cached', 'dom', 'domainID', 'elf',
                     'fault_ep', 'G', 'guard', 'guard_size', 'init', 'ip',
                     'prio', 'sp', 'R', 'RG', 'RX', 'RW', 'RWG', 'RWX', 'W',
-                    'WG', 'WX', 'level', 'masked', 'master_reply', 'paddr',
+                    'WG', 'WX', 'level', 'masked', 'main_reply', 'paddr',
                     'ports', 'reply', 'uncached'), suffix=r'\b'),
              Keyword.Reserved),
 

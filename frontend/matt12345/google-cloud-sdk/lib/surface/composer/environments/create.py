@@ -305,11 +305,11 @@ class CreateBeta(Create):
               prerequisite='enable-private-environment',
               opt='enable-private-endpoint'))
 
-    if args.master_ipv4_cidr and not args.enable_private_environment:
+    if args.main_ipv4_cidr and not args.enable_private_environment:
       raise command_util.InvalidUserInputError(
           PREREQUISITE_OPTION_ERROR_MSG.format(
               prerequisite='enable-private-environment',
-              opt='master-ipv4-cidr'))
+              opt='main-ipv4-cidr'))
 
   def GetOperationMessage(self, args):
     """See base class."""
@@ -336,7 +336,7 @@ class CreateBeta(Create):
         services_ipv4_cidr_block=args.services_ipv4_cidr,
         private_environment=args.enable_private_environment,
         private_endpoint=args.enable_private_endpoint,
-        master_ipv4_cidr=args.master_ipv4_cidr,
+        main_ipv4_cidr=args.main_ipv4_cidr,
         release_track=self.ReleaseTrack())
 
 
@@ -392,5 +392,5 @@ class CreateAlpha(CreateBeta):
         services_ipv4_cidr_block=args.services_ipv4_cidr,
         private_environment=args.enable_private_environment,
         private_endpoint=args.enable_private_endpoint,
-        master_ipv4_cidr=args.master_ipv4_cidr,
+        main_ipv4_cidr=args.main_ipv4_cidr,
         release_track=self.ReleaseTrack())
